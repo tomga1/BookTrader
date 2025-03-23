@@ -14,14 +14,14 @@ namespace BookTrader.Controllers
         }
 
 
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult GetCategorias()
-        {
-            var categorias = _context.Categorias.ToList();
+            var categorias = _context.Categorias.ToList();  
             return View(categorias);
         }
     }

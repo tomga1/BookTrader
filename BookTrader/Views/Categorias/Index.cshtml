@@ -1,0 +1,34 @@
+﻿@model List<Categorias>
+
+
+
+<h1> Listado de categorias</h1>
+
+<div style="margin-top: 20px;"> 
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var categoria in Model)
+            {
+                <tr>
+                    <td>@categoria.Nombre</td>
+                    <td>@categoria.Descripcion</td>
+                    <td>@categoria.FechaAgregado</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@categoria.Id" class="btn btn-warning">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@categoria.Id" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-action="Create" class="btn btn-primary">Agregar Nuevo</a>
+</div>
