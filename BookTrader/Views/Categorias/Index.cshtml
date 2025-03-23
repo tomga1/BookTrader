@@ -1,5 +1,7 @@
 ﻿@model List<Categorias>
-
+@{
+    ViewData["Title"] = "Categorías";
+}
 
 
 <h1> Listado de categorias</h1>
@@ -23,12 +25,48 @@
                     <td>@categoria.FechaAgregado</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@categoria.Id" class="btn btn-warning">Editar</a>
-                        <a asp-action="Delete" asp-route-id="@categoria.Id" class="btn btn-danger">Eliminar</a>
+                        <a href="#" class="btn btn-danger" onclick="confirmarEliminacion(@categoria.Id)">Eliminar</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <a asp-action="Create" class="btn btn-primary">Agregar Nuevo</a>
-</div>
+    <a class="btn btn-primary" data-bs-toggle="modal" href="#modalAgregarCategoria">Agregar Nuevo</a>
+
+
+
+   
+    @* MODAL CON FORM PARA AGREGAR CATEGORIA *@
+    
+
+    <div class="modal fade" id="modalAgregarCategoria" tabindex="-1" aria-labelledby="modalAgregarCategoriaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAgregarCategoriaLabel">Agregar Nueva Categoría</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAgregarCategoria" method="post" action="@Url.Action("Create", "Categorias")">
+                        <div class="mb-3">
+                            <label for="Nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="Nombre" name="Nombre" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Descripcion" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="Descripcion" name="Descripcion" required></textarea>
+                        </div>
+@*                         <input type="hidden" name="IdUsuario" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
+ *@                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@*     <a asp-action="Create" class="btn btn-primary">Agregar Nuevo</a>
+ *@</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/js/site.js"></script>  <!-- Referencia al archivo js -->
