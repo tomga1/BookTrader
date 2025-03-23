@@ -28,3 +28,14 @@ Instalacion de paquetes ENTITY FRAMEWORK
  CONECTION STRING SERVER SQL CASA 
 
    "DefaultConnection": "Server=DESKTOP-RDT17TE\\SQLEXPRESS;Database=BookTrader;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;"
+
+
+
+   ////////////////////////
+   ✅ 5. Prueba Ejecutar la Migración con la Cadena de Conexión Explícita
+En la terminal, intenta ejecutar este comando con la cadena de conexión directamente:
+
+powershell
+Copiar
+Editar
+dotnet ef database update --connection "Server=DESKTOP-RDT17TE\SQLEXPRESS;Database=BookTrader;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;"
