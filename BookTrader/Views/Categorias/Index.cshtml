@@ -1,4 +1,4 @@
-﻿@model List<Categorias>
+﻿@model PaginacionViewModel<Categorias>
 @{
     ViewData["Title"] = "Categorías";
 }
@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var categoria in Model)
+            @foreach (var categoria in Model.Items)
             {
                 <tr>
                     <td>@categoria.Nombre</td>
@@ -31,6 +31,31 @@
             }
         </tbody>
     </table>
+
+    <nav aria-label="Paginación">
+        <ul class="pagination">
+            @if (Model.TienePaginaAnterior)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-pagina="@(Model.PaginaActual - 1)">Anterior</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPaginas; i++)
+            {
+                <li class="page-item @(Model.PaginaActual == i ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-pagina="@i">@i</a>
+                </li>
+            }
+
+            @if (Model.TienePaginaSiguiente)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-pagina="@(Model.PaginaActual + 1)">Siguiente</a>
+                </li>
+            }
+        </ul>
+    </nav>
 
     <a class="btn btn-primary" data-bs-toggle="modal" href="#modalAgregarCategoria">Agregar Nuevo</a>
 
