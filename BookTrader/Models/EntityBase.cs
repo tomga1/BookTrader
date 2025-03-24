@@ -12,6 +12,7 @@
 
         public string? Descripcion { get; set; }
         public int? IdUsuario { get; set; }
+        public bool Estado { get; set; }
 
     }
 }
