@@ -23,13 +23,13 @@
                             <a class="nav-link active" aria-current="page" href="@Url.Action("Index", "Home")">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Sobre nosotros</a>
+                            <a class="nav-link" href="@Url.Action("SobreNosotrosView", "Home")">Sobre nosotros</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Admin
                             </a>
-                            <ul class="dropdown-menu">  
+                            <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="@Url.Action("Index", "Categorias")">Categorias</a></li>
                                 <li><a class="dropdown-item" href="#">Estados</a></li>
                                 <li><hr class="dropdown-divider"></li>
@@ -38,14 +38,11 @@
                         </li>
                         <li class="nav-item dropdown">
                             <button class="btn btn-light dropdown-toggle" id="categoriasDropdown" data-bs-toggle="dropdown">
-                                Categorías
+                                Categorías de libros
                             </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" onclick="filtrarCategoria('Ficción')">Ficción</a></li>
-                                <li><a class="dropdown-item" href="#" onclick="filtrarCategoria('Misterio')">Misterio</a></li>
-                                <li><a class="dropdown-item" href="#" onclick="filtrarCategoria('Historia')">Historia</a></li>
-                            </ul>
+                            @await Component.InvokeAsync("Categorias")
                         </li>
+
                     </ul>
                     <form class="d-flex" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

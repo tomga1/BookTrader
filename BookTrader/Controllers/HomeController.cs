@@ -18,6 +18,12 @@ namespace BookTrader.Controllers
             return View();
         }
 
+        public IActionResult SobreNosotrosView()
+        {
+            return View();
+        }
+        
+
         public IActionResult Privacy()
         {
             return View();
