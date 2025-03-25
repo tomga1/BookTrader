@@ -1,22 +1,59 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+}
+
+.feedback-btn {
+    position: fixed;
+    bottom: 25px;
+    left: 20px;
+    width: 70px;
+    height: 70px;
+    background-color: #FFD700;
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+    .feedback-btn:hover {
+        background-color: #FFC107;
+    }
+
+#feedbackText {
+    position: fixed;
+    bottom: 0px; /* Justo arriba del botón */
+    left: 10px;
+    font-size: 12px; /* Tamaño más chico */
+    font-weight: bold;
+    color: #555; /* Gris oscuro para que no sea muy llamativo */
+    background: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+    padding: 5px 10px;
+    border-radius: 5px;
 }
