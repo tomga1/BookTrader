@@ -21,7 +21,15 @@ body {
     margin-bottom: 60px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 300;
+    background-color: white;
+    color: black;
 }
+
+
+
+    button:hover {
+        background-color: #005f73;
+    }
 
 .feedback-btn {
     position: fixed;
