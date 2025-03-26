@@ -3,6 +3,7 @@ using BookTrader.Data;
 using BookTrader.Mapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using BookTrader.Models;
 
 
 
@@ -15,15 +16,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
 {
-    // Puedes personalizar las opciones de Identity (ej: requisitos de contraseña)
-    options.SignIn.RequireConfirmedAccount = false;
-})
-.AddRoles<IdentityRole>() // Habilita roles, ej: Admin y User
-.AddEntityFrameworkStores<ApplicationDbContext>();
-
-
+    options.LoginPath = "/Account/Login";  // Redirige si no está autenticado
+    options.AccessDeniedPath = "/Account/AccessDenied"; // Redirige si no tiene permisos
+});
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
