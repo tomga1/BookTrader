@@ -39,7 +39,6 @@ namespace BookTrader.Controllers
                 return RedirectToAction("Index", "Home"); // Redirigir al Home/Index
             }
 
-            // En caso de error, también rediriges o podrías mostrar un mensaje de error
             return RedirectToAction("Index", "Home");
         }
 
