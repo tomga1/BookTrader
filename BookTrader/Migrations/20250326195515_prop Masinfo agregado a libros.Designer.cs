@@ -4,6 +4,7 @@ using BookTrader.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookTrader.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250326195515_prop Masinfo agregado a libros")]
+    partial class propMasinfoagregadoalibros
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,9 +115,6 @@ namespace BookTrader.Migrations
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<int>("EstadoPublicacion")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FechaAgregado")
                         .HasColumnType("datetime2");
 
@@ -137,6 +137,7 @@ namespace BookTrader.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MasInfo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
