@@ -8,7 +8,7 @@
 
         public DateTime FechaPublicacion { get; set; }
 
-        public DateTime FechaAgregado { get; set; }
+        public DateTime FechaAgregado { get; set; } =  DateTime.Now; 
 
         public string? Descripcion { get; set; }
         public int? IdUsuario { get; set; }
