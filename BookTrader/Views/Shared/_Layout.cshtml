@@ -86,13 +86,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form asp-controller="Sugerencias" asp-action="Create" method="post">
                         <div class="mb-3">
                             <label for="feedbackType" class="form-label">Tipo</label>
                             <select class="form-control" id="feedbackType">
-                                <option>Idea</option>
-                                <option>Sugerencia</option>
-                                <option>Error</option>
+                                <option value="Idea">Idea</option>
+                                <option value="Sugerencia">Sugerencia</option>
+                                <option value="Error">Error</option>
                             </select>
                         </div>
                         <div class="mb-3">

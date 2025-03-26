@@ -9,6 +9,8 @@ namespace BookTrader.Mapper
         public AutoMapperProfile() 
         {
             CreateMap<InsertCategoriaDTO, Categorias>(); // Mapeo automático
+            CreateMap<InsertSugerenciaDTO, Sugerencias>(); // Mapeo automático
+
 
         }
 
