@@ -34,6 +34,8 @@ namespace BookTrader.Controllers
                 _context.Sugerencias.Add(sugerencia);
                 await _context.SaveChangesAsync();
 
+
+
                 return RedirectToAction("Index", "Home"); // Redirigir al Home/Index
             }
 
