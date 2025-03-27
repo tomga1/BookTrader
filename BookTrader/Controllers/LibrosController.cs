@@ -1,7 +1,9 @@
 ﻿using BookTrader.Data;
+using BookTrader.DTOs;
 using BookTrader.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper; 
 
 namespace BookTrader.Controllers
 {
@@ -9,12 +11,14 @@ namespace BookTrader.Controllers
     {
         private readonly ApplicationDbContext _context;
         private const int RegistrosPorPagina = 10;
+        private readonly IMapper _mapper;
 
 
-        public LibrosController(ApplicationDbContext context)
+        public LibrosController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context; 
-            
+            _mapper = mapper;   
+               
         }
 
         public async Task<IActionResult> Index(int pagina = 1)
@@ -37,6 +41,24 @@ namespace BookTrader.Controllers
             };
 
             return View(modeloPaginado);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromForm] InsertLibroDTO insertLibroDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                var libro = _mapper.Map<Libros>(insertLibroDTO);
+
+                _context.Libros.Add(libro);
+                await _context.SaveChangesAsync();
+
+
+                return RedirectToAction("Index");
+            }
+            return View();
         }
     }
 }

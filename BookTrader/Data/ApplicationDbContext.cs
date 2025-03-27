@@ -15,7 +15,7 @@ namespace BookTrader.Data
         public DbSet<Libros> Libros { get; set; }
         public DbSet<Sugerencias> Sugerencias { get; set; }
 
-
+        public DbSet<Condiciones> Condiciones { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

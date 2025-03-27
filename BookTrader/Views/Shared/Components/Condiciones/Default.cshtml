@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BookTrader.Models.Categorias>
+﻿@model IEnumerable<BookTrader.Models.Condiciones>
 
 
 @{
@@ -8,11 +8,11 @@
 @if (esDropdown)
 {
     <ul class="dropdown-menu">
-        @foreach (var categoria in Model)
+        @foreach (var condiciones in Model)
         {
             <li>
-                <a class="dropdown-item" href="#" onclick="filtrarCategoria('@categoria.Id')">
-                    @categoria.Nombre
+                <a class="dropdown-item" href="#" onclick="filtrarCategoria('@condiciones.Id')">
+                    @condiciones.Nombre
                 </a>
             </li>
         }
@@ -20,10 +20,10 @@
 }
 else
 {
-    <option selected>Seleccione una categoría</option>
-    @foreach (var categoria in Model)
+    <option selected>Seleccione una condicion</option>
+    @foreach (var condicion in Model)
     {
-        <option value="@categoria.Id">@categoria.Nombre</option>
+        <option value="@condicion.Id">@condicion.Nombre</option>
     }
 }
 
