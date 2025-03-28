@@ -8,7 +8,7 @@
 
 
 <div class="mb-6 mt-5">
-    <form id="formAgregarLibro method="post" action="@Url.Action("Create", "Libros")">
+    <form id="formAgregarLibro" method="post" enctype="multipart/form-data" action="@Url.Action("Create", "Libros")">
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre del Libro</label>
             <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -36,12 +36,10 @@
             </select>
         </div>
 
-
-
         <div class="mb-3">
             <label for="condicion" class="form-label">Condición</label>
             <select class="form-select" id="condicion" name="condicion">
-                    @await Component.InvokeAsync("Condiciones", new { dropdown = false})
+                @await Component.InvokeAsync("Condiciones", new { dropdown = false })
             </select>
         </div>
 
@@ -52,7 +50,16 @@
 
         <div class="mb-3">
             <label for="imagenUrl" class="form-label">URL de la Imagen</label>
-            <input type="url" class="form-control" id="imagenUrl" name="imagenUrl">
+            <input type="url" class="form-control" id="imagenUrl" name="imagenUrl" oninput="validarImagen('url')">
+        </div>
+
+        <div class="mb-3">
+            <label for="imagenArchivo" class="form-label">Subir Imagen</label>
+            <input type="file" class="form-control" id="imagenArchivo" name="imagenArchivo" accept="image/*" onchange="validarImagen('archivo')">
+        </div>
+
+        <div class="mb-3">
+            <img id="previewImg" src="" class="img-fluid" style="max-width: 200px; display: none;">
         </div>
 
         <div class="mb-3">
@@ -67,5 +74,4 @@
 
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
-
 </div>

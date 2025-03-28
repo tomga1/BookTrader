@@ -21,6 +21,7 @@ namespace BookTrader.Models
         [Required]
         public decimal Precio { get; set; }
         public string? ImagenUrl { get; set; }
+        public string? ImagenPath { get; set; } 
         public string? MasInfo { get; set; }
 
         public EstadoPublicacion EstadoPublicacion { get; set; } = EstadoPublicacion.Pendiente;
