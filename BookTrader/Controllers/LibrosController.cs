@@ -62,7 +62,7 @@ namespace BookTrader.Controllers
                 // Manejar la imagen
                 if (imagenArchivo != null)
                 {
-                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "imagenes");
+                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
                     var uniqueFileName = Guid.NewGuid().ToString() + "_" + imagenArchivo.FileName;
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -71,7 +71,7 @@ namespace BookTrader.Controllers
                         await imagenArchivo.CopyToAsync(fileStream);
                     }
 
-                    libro.ImagenUrl = "/imagenes/" + uniqueFileName; // Guarda la ruta del archivo en la BD
+                    libro.ImagenUrl = "/images/" + uniqueFileName; // Guarda la ruta del archivo en la BD
                 }
                 else
                 {
@@ -84,7 +84,7 @@ namespace BookTrader.Controllers
                 return RedirectToAction("MisLibros", "Libros");
             }
 
-            return View(insertLibroDTO);
+            return View();
         }
 
         public IActionResult MisLibros()

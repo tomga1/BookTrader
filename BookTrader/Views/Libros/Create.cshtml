@@ -1,0 +1,12 @@
+﻿@model BookTrader.Models.Libros
+
+@{
+
+    <form asp-action="Create" method="post">
+        <div>
+            <label>Título:</label>
+            <input asp-for="Nombre" />
+        </div>
+        <button type="submit">Guardar</button>
+    </form>
+}
