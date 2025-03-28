@@ -81,10 +81,17 @@ namespace BookTrader.Controllers
                 _context.Libros.Add(libro);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("MisLibros", "Libros");
             }
 
             return View(insertLibroDTO);
+        }
+
+        public IActionResult MisLibros()
+        {
+            var libros = _context.Libros.ToList();
+
+            return View(libros); 
         }
 
 
