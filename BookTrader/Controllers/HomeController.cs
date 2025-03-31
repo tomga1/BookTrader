@@ -1,5 +1,7 @@
+using BookTrader.Data;
 using BookTrader.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace BookTrader.Controllers
@@ -7,15 +9,21 @@ namespace BookTrader.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context ,ILogger<HomeController> logger)
         {
             _logger = logger;
+            _context = context; 
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var libros = await _context.Libros
+                .Where(l => l.EstadoPublicacion == EstadoPublicacion.Aprobado)
+                .ToListAsync();
+
+            return View(libros);
         }
 
         public IActionResult SobreNosotrosView()
