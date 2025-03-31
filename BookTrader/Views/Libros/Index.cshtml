@@ -31,7 +31,7 @@
 
         <div class="mb-3">
             <label for="categoria" class="form-label">Categoría</label>
-            <select class="form-select" id="categoria" name="categoria">
+            <select class="form-select" id="categoria" name="IdCategoria">
                 @await Component.InvokeAsync("Categorias", new { dropdown = false })
             </select>
         </div>
@@ -49,13 +49,8 @@
         </div>
 
         <div class="mb-3">
-            <label for="imagenUrl" class="form-label">URL de la Imagen</label>
-            <input type="url" class="form-control" id="imagenUrl" name="imagenUrl" oninput="validarImagen('url')">
-        </div>
-
-        <div class="mb-3">
             <label for="imagenArchivo" class="form-label">Subir Imagen</label>
-            <input type="file" class="form-control" id="imagenArchivo" name="imagenArchivo" accept="image/*" onchange="validarImagen('archivo')">
+            <input type="file" class="form-control" id="imagenArchivo" name="imagenArchivo" accept="image/*" required onchange="validarImagen('archivo')">
         </div>
 
         <div class="mb-3">

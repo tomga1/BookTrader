@@ -24,20 +24,30 @@ function validarImagen(tipo) {
     let previewImg = document.getElementById("previewImg");
 
     if (tipo === "url") {
-        if (urlInput.value.trim() !== "") {
-            fileInput.value = ""; // Borra el archivo si hay URL
-            fileInput.disabled = true;
-            previewImg.src = urlInput.value;
-            previewImg.style.display = "block";
-        } else {
-            fileInput.disabled = false;
+        // Solo ejecuta si el input de URL existe
+        if (urlInput) {
+            if (urlInput.value.trim() !== "") {
+                if (fileInput) {
+                    fileInput.value = ""; // Borra el archivo si hay URL
+                    fileInput.disabled = true;
+                }
+                previewImg.src = urlInput.value;
+                previewImg.style.display = "block";
+            } else {
+                if (fileInput) {
+                    fileInput.disabled = false;
+                }
+            }
         }
-    } else if (tipo === "archivo") {
+    }
+    if (tipo === "archivo") {
         if (fileInput.files.length > 0) {
-            urlInput.value = ""; // Borra la URL si hay archivo
-            urlInput.disabled = true;
-
-            // Cargar previsualización de imagen
+            // Si existe el input de URL, vaciarlo y deshabilitarlo
+            if (urlInput) {
+                urlInput.value = "";
+                urlInput.disabled = true;
+            }
+            // Cargar previsualización de imagen usando FileReader
             let reader = new FileReader();
             reader.onload = function (e) {
                 previewImg.src = e.target.result;
@@ -45,10 +55,13 @@ function validarImagen(tipo) {
             };
             reader.readAsDataURL(fileInput.files[0]);
         } else {
-            urlInput.disabled = false;
+            if (urlInput) {
+                urlInput.disabled = false;
+            }
         }
     }
 }
+
 
 
 
