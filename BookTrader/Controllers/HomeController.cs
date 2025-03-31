@@ -20,11 +20,13 @@ namespace BookTrader.Controllers
         public async Task<IActionResult> Index()
         {
             var libros = await _context.Libros
+                .Include(l => l.Categoria)  // Asegúrate de incluir la propiedad de navegación 'Categoria'
                 .Where(l => l.EstadoPublicacion == EstadoPublicacion.Aprobado)
                 .ToListAsync();
 
             return View(libros);
         }
+
 
         public IActionResult SobreNosotrosView()
         {

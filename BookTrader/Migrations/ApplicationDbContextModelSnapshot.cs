@@ -71,7 +71,7 @@ namespace BookTrader.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("FechaPublicacion")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2"); 
 
                     b.Property<int?>("IdUsuario")
                         .HasColumnType("int");

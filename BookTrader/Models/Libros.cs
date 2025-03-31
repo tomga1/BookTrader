@@ -27,7 +27,7 @@ namespace BookTrader.Models
         public EstadoPublicacion EstadoPublicacion { get; set; } = EstadoPublicacion.Pendiente;
 
         // Relaciones con otras tablas (opcional)
-        public Categorias? Categoria { get; set; }
+        public virtual Categorias? Categoria { get; set; }
         public Condiciones? Condicion { get; set; }  // Relación con la tabla Condiciones
     }
 }
