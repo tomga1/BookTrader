@@ -2,9 +2,9 @@
 
 namespace BookTrader.Controllers
 {
-    public class LoginController : Controller
+    public class AccountController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Login()
         {
             return View();
         }

@@ -13,7 +13,7 @@ namespace BookTrader.ViewModels
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Display(Name = "Me recuerdas?")]
+        [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
     }
 }
