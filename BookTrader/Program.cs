@@ -17,7 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<Users, IdentityRole>(options =>
 {
     options.Password.RequireNonAlphanumeric = false; 
     options.Password.RequiredLength = 8;

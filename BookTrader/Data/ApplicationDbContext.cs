@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookTrader.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<Users>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
