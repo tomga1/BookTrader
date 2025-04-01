@@ -21,6 +21,13 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+
+            <div class="float-end">
+                <a asp-controller="Account" asp-action="VerifyEmail" class="text-decoration-none">
+                    Olvidaste tu contraseña?
+                </a>
+            </div>
+
             <div class="form-check mb-3">
                 <label class="form-check-label">
                     <input asp-for="RememberMe" class="form-check-input"/>
@@ -28,9 +35,18 @@
                 </label>
             </div>
             <input type="submit" value="Login" class="btn btn-success w-100 p-2"/>
+            <p class="text-center mt-2">
+                No tienes una cuenta? <a asp-controller="Account" asp-action="Register" class="text-decoration-none">Registrate</a>
+            </p>
             <div class="text-center">
                 <a asp-controller="Home" asp-action="Index" style="margin-top: 10px" class="btn btn-secondary w-100 p-2">Back</a>
             </div>
         </form>
     </div>
 </div>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");
+    }
+}
