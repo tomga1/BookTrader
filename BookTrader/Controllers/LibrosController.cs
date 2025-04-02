@@ -3,7 +3,8 @@ using BookTrader.DTOs;
 using BookTrader.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper; 
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookTrader.Controllers
 {
@@ -23,6 +24,7 @@ namespace BookTrader.Controllers
                
         }
 
+        [Authorize]
         public async Task<IActionResult> Index(int pagina = 1)
         {
             int totalRegistros = await _context.Libros.CountAsync();
@@ -47,6 +49,7 @@ namespace BookTrader.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromForm] InsertLibroDTO insertLibroDTO, IFormFile imagenArchivo)
         {
             if (!string.IsNullOrEmpty(insertLibroDTO.ImagenUrl) && imagenArchivo != null)
