@@ -1,5 +1,6 @@
 using BookTrader.Data;
 using BookTrader.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -32,8 +33,8 @@ namespace BookTrader.Controllers
         {
             return View();
         }
-        
 
+        [Authorize] 
         public IActionResult Privacy()
         {
             return View();
