@@ -12,19 +12,23 @@ namespace BookTrader.Controllers
     {
         private readonly SignInManager<Users> _signInManager;
         private readonly UserManager<Users> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager; 
 
-        public AccountController(SignInManager<Users> signInManager , UserManager<Users> userManager)
+        public AccountController(SignInManager<Users> signInManager , UserManager<Users> userManager, RoleManager<IdentityRole> roleManager)
         {
             this._signInManager = signInManager;
-            this._userManager = userManager;    
+            this._userManager = userManager;   
+            this._roleManager = roleManager;    
         }
 
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid) 

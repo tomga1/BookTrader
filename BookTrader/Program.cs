@@ -4,6 +4,7 @@ using BookTrader.Mapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BookTrader.Models;
+using BookTrader.Services;
 
 
 
@@ -41,6 +42,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 var app = builder.Build();
 
+await SeedService.SeedDatabase(app.Services);
 
 
 // Configure the HTTP request pipeline.
@@ -58,7 +60,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+ 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
