@@ -41,7 +41,7 @@
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="#">Something else here</a></li>
                                 </ul>
-                            </li>   
+                            </li>
                         }
                         <li class="nav-item dropdown">
                             <button class="btn btn-light dropdown-toggle" id="categoriasDropdown" data-bs-toggle="dropdown">
@@ -51,7 +51,7 @@
                         </li>
 
                         @if (User.Identity.IsAuthenticated)
-                        {  
+                        {
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="@Url.Action("Index", "Libros")">Publicar un libro</a>
                             </li>
