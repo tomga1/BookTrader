@@ -49,12 +49,14 @@ namespace BookTrader.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]  
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -64,12 +66,27 @@ namespace BookTrader.Controllers
                     NombreCompleto = model.Name,
                     Email = model.Email,
                     UserName = model.Email,
+                    NormalizedUserName = model.Email.ToUpper(),
+                    NormalizedEmail = model.Email.ToUpper(),   
                 };
 
                 var result = await _userManager.CreateAsync(users, model.Password);
 
                 if(result.Succeeded)
                 {
+                    var roleExist = await _roleManager.RoleExistsAsync("User");
+
+                    if (!roleExist)
+                    {
+                        var role = new IdentityRole("User");
+                        await _roleManager.CreateAsync(role);
+
+                    }
+
+                    await _userManager.AddToRoleAsync(users, "User");
+
+                    await _signInManager.SignInAsync(users, isPersistent: false);
+
                     return RedirectToAction("Login", "Account");
                 }
                 else
@@ -87,13 +104,14 @@ namespace BookTrader.Controllers
 
 
 
-
+        [HttpGet]
         public IActionResult VerifyEmail()
         {
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyEmail(VerifyEmailViewModel model)
         {
 
