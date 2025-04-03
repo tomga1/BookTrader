@@ -3,6 +3,7 @@ using BookTrader.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using System.Diagnostics;
 
 namespace BookTrader.Controllers
@@ -36,6 +37,18 @@ namespace BookTrader.Controllers
 
         [Authorize] 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [Authorize(Roles ="Admin")]
+        public IActionResult Admin()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "User")]
+        public IActionResult User()
         {
             return View();
         }

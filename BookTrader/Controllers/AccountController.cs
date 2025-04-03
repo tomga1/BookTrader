@@ -133,6 +133,7 @@ namespace BookTrader.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public IActionResult ChangePassword(string username)
         {
             if (string.IsNullOrEmpty(username))
@@ -181,6 +182,8 @@ namespace BookTrader.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
