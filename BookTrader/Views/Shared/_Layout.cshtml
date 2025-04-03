@@ -50,10 +50,12 @@
                             @await Component.InvokeAsync("Categorias", new { dropdown = true })
                         </li>
 
-
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="@Url.Action("Index", "Libros")">Publicar un libro</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {  
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="@Url.Action("Index", "Libros")">Publicar un libro</a>
+                            </li>
+                        }
 
 
                     </ul>
