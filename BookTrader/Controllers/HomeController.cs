@@ -19,12 +19,17 @@ namespace BookTrader.Controllers
             _context = context; 
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
             var libros = await _context.Libros
                 .Include(l => l.Categoria)  // Asegúrate de incluir la propiedad de navegación 'Categoria'
                 .Where(l => l.EstadoPublicacion == EstadoPublicacion.Aprobado)
                 .ToListAsync();
+
+            if(!string.IsNullOrEmpty(searchString))
+            {
+                libros = libros.Where(n => n.Nombre.Contains(searchString) || n.Autor.Contains(searchString)).ToList();
+            }
 
             return View(libros);
         }
@@ -58,5 +63,7 @@ namespace BookTrader.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+       
     }
 }

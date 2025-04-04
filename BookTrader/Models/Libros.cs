@@ -30,5 +30,6 @@ namespace BookTrader.Models
         // Relaciones con otras tablas (opcional)
         public virtual Categorias? Categoria { get; set; }
         public Condiciones? Condicion { get; set; }  // Relación con la tabla Condiciones
+        public virtual IdiomasEntity? Idioma {  get; set; }
     }
 }
