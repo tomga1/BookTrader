@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using BookTrader.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookTrader.Controllers
 {
@@ -26,6 +27,8 @@ namespace BookTrader.Controllers
 
 
         [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] InsertSugerenciaDTO insertSugerenciaDTO)
         {
             if (ModelState.IsValid)
