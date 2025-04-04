@@ -12,7 +12,7 @@
         public DateTime FechaAgregado { get; set; } =  DateTime.Now; 
 
         public string? Descripcion { get; set; }
-        public int? IdUsuario { get; set; }
+        public string? IdUsuario { get; set; }
         public bool Estado { get; set; }
 
     }

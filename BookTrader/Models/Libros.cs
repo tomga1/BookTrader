@@ -23,6 +23,7 @@ namespace BookTrader.Models
         public string? ImagenUrl { get; set; }
         public string? ImagenPath { get; set; } 
         public string? MasInfo { get; set; }
+        public int cantPaginas { get; set; }
 
         public EstadoPublicacion EstadoPublicacion { get; set; } = EstadoPublicacion.Pendiente;
 

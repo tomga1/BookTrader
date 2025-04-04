@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookTrader.Controllers
 {
@@ -14,14 +15,16 @@ namespace BookTrader.Controllers
         private const int RegistrosPorPagina = 10;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<Users> _userManager;
 
 
-        public LibrosController(ApplicationDbContext context, IMapper mapper, IWebHostEnvironment webHostEnvironment)
+
+        public LibrosController(ApplicationDbContext context, IMapper mapper, IWebHostEnvironment webHostEnvironment, UserManager<Users> userManager)
         {
             _context = context; 
             _mapper = mapper;   
             _webHostEnvironment = webHostEnvironment;
-               
+            _userManager = userManager;       
         }
 
         [Authorize]
@@ -60,7 +63,12 @@ namespace BookTrader.Controllers
 
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
+
+                string? idUsuario = user?.Id; 
+                
                 var libro = _mapper.Map<Libros>(insertLibroDTO);
+                libro.IdUsuario = idUsuario;
 
                 // Manejar la imagen
                 if (imagenArchivo != null)
@@ -92,9 +100,9 @@ namespace BookTrader.Controllers
 
         public IActionResult MisLibros()
         {
-            var libros = _context.Libros.ToList();
+            //var libros = _context.Libros.Where(l => l.IdUsuario == ToList();
 
-            return View(libros); 
+            return View();
         }
 
 

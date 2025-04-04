@@ -4,6 +4,7 @@ using BookTrader.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookTrader.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250404134935_cantidad de pag a libros")]
+    partial class cantidaddepagalibros
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,8 +45,8 @@ namespace BookTrader.Migrations
                     b.Property<DateTime>("FechaPublicacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("IdUsuario")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("IdUsuario")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
@@ -73,8 +76,8 @@ namespace BookTrader.Migrations
                     b.Property<DateTime>("FechaPublicacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("IdUsuario")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("IdUsuario")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
@@ -130,8 +133,8 @@ namespace BookTrader.Migrations
                     b.Property<int>("IdCondicion")
                         .HasColumnType("int");
 
-                    b.Property<string>("IdUsuario")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("IdUsuario")
+                        .HasColumnType("int");
 
                     b.Property<string>("ImagenPath")
                         .HasColumnType("nvarchar(max)");
