@@ -4,28 +4,56 @@
 
     <h2>Mis Libros</h2>
 
-    // <table class="table">
-    //     <thead>
-    //         <tr>
-    //             <th>Nombre</th>
-    //             <th>Autor</th>
-    //             <th>Editorial</th>
-    //             <th>ISBN</th>
-    //             <th>Acciones</th>
-    //         </tr>
-    //     </thead>
-    //     <tbody>
-    //         @foreach (var libro in Model)
-    //         {
-    //             <tr>
-    //                 <td>@libro.Nombre</td>
-    //                 <td>@libro.Autor</td>
-    //                 <td>@libro.Editorial</td>
-    //                 <td>@libro.ISBN</td>
-    //                 <td>
-    //                 </td>
-    //             </tr>
-    //         }
-    //     </tbody>
-    // </table>
+    <div style="margin-top: 20px;"> 
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var categoria in Model.Items)
+            {
+                <tr>
+                    <td>@categoria.Nombre</td>
+                    <td>@categoria.Descripcion</td>
+                    <td>@categoria.FechaAgregado</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@categoria.Id" class="btn btn-warning">Editar</a>
+                        <a href="#" class="btn btn-danger" onclick="confirmarEliminacion(@categoria.Id)">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Paginación">
+        <ul class="pagination">
+            @if (Model.TienePaginaAnterior)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-pagina="@(Model.PaginaActual - 1)">Anterior</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPaginas; i++)
+            {
+                <li class="page-item @(Model.PaginaActual == i ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-pagina="@i">@i</a>
+                </li>
+            }
+
+            @if (Model.TienePaginaSiguiente)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-pagina="@(Model.PaginaActual + 1)">Siguiente</a>
+                </li>
+            }
+        </ul>
+    </nav>
+
+    </div>
 }
