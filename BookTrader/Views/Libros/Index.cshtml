@@ -48,6 +48,12 @@
                 @await Component.InvokeAsync("Condiciones", new { dropdown = false })
             </select>
         </div>
+        <div class="mb-3">
+            <label for="idioma" class="form-label">Idioma</label>
+            <select class="form-select" id="idioma" name="IdiomaId">
+                @await Component.InvokeAsync("Idiomas", new { dropdown = false })
+            </select>
+        </div>
 
         <div class="mb-3">
             <label for="precio" class="form-label">Precio</label>

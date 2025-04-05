@@ -1,0 +1,42 @@
+﻿@model IEnumerable<BookTrader.Models.IdiomasEntity>
+
+
+@{
+    var esDropdown = ViewData["Dropdown"] as bool? ?? false;
+}
+
+@if (esDropdown)
+{
+    <ul class="dropdown-menu">
+        @foreach (var idioma in Model)
+        {
+            <li>
+                <a class="dropdown-item" href="#" onclick="filtrarCategoria('@idioma.Id')">
+                    @idioma.Nombre
+                </a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <option selected>Seleccione un idioma</option>
+    @foreach (var idioma in Model)
+    {
+        <option value="@idioma.Id">@idioma.Nombre</option>
+    }
+}
+
+@* <ul class="dropdown-menu">
+    @foreach (var categoria in Model)
+    {
+        <li>
+            <a class="dropdown-item" href="#" onclick="filtrarCategoria('@categoria.Id')">
+                @categoria.Nombre
+            </a>
+        </li>
+    }
+</ul>
+
+
+ *@

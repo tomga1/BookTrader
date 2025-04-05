@@ -13,6 +13,7 @@ namespace BookTrader.DTOs
         public string? ISBN { get; set; }
         public int IdCategoria { get; set; }
         public int IdCondicion { get; set; }
+        public int IdiomaId { get; set; }
         [Required]
         public decimal Precio { get; set; }
         public string? ImagenUrl { get; set; }

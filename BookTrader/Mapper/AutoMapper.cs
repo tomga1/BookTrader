@@ -14,6 +14,7 @@ namespace BookTrader.Mapper
             CreateMap<InsertLibroDTO, Libros>()
             .ForMember(dest => dest.Categoria, opt => opt.Ignore()) // Se obtiene de la BD
             .ForMember(dest => dest.Condicion, opt => opt.Ignore()) // Se obtiene de la BD
+            .ForMember(dest => dest.Idioma, opt => opt.Ignore()) // Se obtiene de la BD
             .ForMember(dest => dest.ImagenPath, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.ImagenUrl) ? null : src.ImagenUrl))
             .ForMember(dest => dest.EstadoPublicacion, opt => opt.Ignore());
 
