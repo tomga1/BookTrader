@@ -98,12 +98,34 @@ namespace BookTrader.Controllers
             return View();
         }
 
-        public IActionResult MisLibros()
-        {
-            //var libros = _context.Libros.Where(l => l.IdUsuario == ToList();
 
-            return View();
+        [Authorize]
+        public async Task<IActionResult> MisLibros(int pagina = 1)
+        {
+            var usuario = await _userManager.GetUserAsync(User);
+            string? idUsuario = usuario?.Id;
+
+            int totalRegistros = await _context.Libros
+                .Where(l => l.IdUsuario == idUsuario)
+                .CountAsync();
+
+            var libros = await _context.Libros
+                .Where(l => l.IdUsuario == idUsuario)
+                .OrderByDescending(c => c.FechaAgregado)
+                .Skip((pagina - 1) * RegistrosPorPagina)
+                .Take(RegistrosPorPagina)
+                .ToListAsync();
+
+            var modeloPaginado = new PaginacionViewModel<Libros>
+            {
+                Items = libros,
+                PaginaActual = pagina,
+                TotalPaginas = (int)Math.Ceiling((double)totalRegistros / RegistrosPorPagina)
+            };
+
+            return View(modeloPaginado);
         }
+
 
 
     }
