@@ -65,3 +65,19 @@ body {
     padding: 5px 10px;
     border-radius: 5px;
 }
+
+
+.img-fija {
+    height: 250px; /* Podés ajustar según lo que te guste */
+    object-fit: cover;
+}
+
+.card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body {
+    flex-grow: 1;
+}
