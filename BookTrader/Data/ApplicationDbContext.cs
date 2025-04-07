@@ -17,6 +17,10 @@ namespace BookTrader.Data
 
         public DbSet<Condiciones> Condiciones { get; set; }
         public DbSet<IdiomasEntity> Idiomas { get; set; }
+        public DbSet<Paises> Paises { get; set; }
+        public DbSet<Provincias> Provincias { get; set; }
+        public DbSet<Localidades> Localidades { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder builder)
