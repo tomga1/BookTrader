@@ -1,8 +1,10 @@
-﻿using BookTrader.Models;
+﻿using BookTrader.Data;
+using BookTrader.Models;
 using BookTrader.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -12,13 +14,15 @@ namespace BookTrader.Controllers
     {
         private readonly SignInManager<Users> _signInManager;
         private readonly UserManager<Users> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager; 
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context; 
 
-        public AccountController(SignInManager<Users> signInManager , UserManager<Users> userManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(SignInManager<Users> signInManager , UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             this._signInManager = signInManager;
             this._userManager = userManager;   
-            this._roleManager = roleManager;    
+            this._roleManager = roleManager;  
+            this._context = context;    
         }
 
         [HttpGet]
@@ -52,7 +56,17 @@ namespace BookTrader.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            var model = new RegisterViewModel
+            {
+                Paises = _context.Paises
+                    .Select(p => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Nombre,
+                    }).ToList()
+
+            };
+            return View(model);
         }
 
         [HttpPost]
@@ -95,7 +109,14 @@ namespace BookTrader.Controllers
                     {
                         ModelState.AddModelError("", error.Description); 
                     }
-                     
+
+
+                    model.Paises = _context.Paises
+                        .Select(p => new SelectListItem
+                        {
+                            Value = p.Id.ToString(),
+                            Text = p.Nombre
+                        }).ToList();
                     return View(model);
                 }
             }
