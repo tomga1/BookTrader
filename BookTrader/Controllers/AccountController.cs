@@ -36,22 +36,32 @@ namespace BookTrader.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
-                if (result.Succeeded)
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction("Index", "Home");
+                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "El email o la contraseña son incorrectos.");
+                        return View(model);
+                    }
                 }
-                else
-                {
-                    ModelState.AddModelError("", "El email o la contraseña son incorrectos.");
-                    return View(model);
-                }
+
+                return View(model);
             }
+            catch (Exception ex)
+            {
 
-            return View(model);
+                ModelState.AddModelError(string.Empty, "Ocurrió un error inesperado: " + ex.Message);
+                return View(model);
+            }
         }
 
         [HttpGet]
