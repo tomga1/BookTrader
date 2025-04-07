@@ -29,6 +29,13 @@ namespace BookTrader.ViewModels
         [Display(Name = "País")]
         public int? PaisId { get; set; }
 
+        [Required(ErrorMessage = "Debes seleccionar una provincia")]
+        [Display(Name = "Provincia")]
+        public int? ProvinciaId { get; set; }
+
+
+
+        public List<SelectListItem> Provincias { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> Paises { get; set; } = new List<SelectListItem>();
 
     }

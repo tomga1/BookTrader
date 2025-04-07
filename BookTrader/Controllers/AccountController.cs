@@ -15,14 +15,14 @@ namespace BookTrader.Controllers
         private readonly SignInManager<Users> _signInManager;
         private readonly UserManager<Users> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly ApplicationDbContext _context; 
+        private readonly ApplicationDbContext _context;
 
-        public AccountController(SignInManager<Users> signInManager , UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
+        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             this._signInManager = signInManager;
-            this._userManager = userManager;   
-            this._roleManager = roleManager;  
-            this._context = context;    
+            this._userManager = userManager;
+            this._roleManager = roleManager;
+            this._context = context;
         }
 
         [HttpGet]
@@ -35,7 +35,7 @@ namespace BookTrader.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
@@ -63,14 +63,18 @@ namespace BookTrader.Controllers
                     {
                         Value = p.Id.ToString(),
                         Text = p.Nombre,
-                    }).ToList()
+                    }).ToList(),
 
+                // Opcional: si querés dejarlo vacío al principio
+                Provincias = new List<SelectListItem>()
             };
+
             return View(model);
+
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]  
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -81,12 +85,12 @@ namespace BookTrader.Controllers
                     Email = model.Email,
                     UserName = model.Email,
                     NormalizedUserName = model.Email.ToUpper(),
-                    NormalizedEmail = model.Email.ToUpper(),   
+                    NormalizedEmail = model.Email.ToUpper(),
                 };
 
                 var result = await _userManager.CreateAsync(users, model.Password);
 
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
                     var roleExist = await _roleManager.RoleExistsAsync("User");
 
@@ -107,7 +111,7 @@ namespace BookTrader.Controllers
                 {
                     foreach (var error in result.Errors)
                     {
-                        ModelState.AddModelError("", error.Description); 
+                        ModelState.AddModelError("", error.Description);
                     }
 
 
@@ -117,10 +121,34 @@ namespace BookTrader.Controllers
                             Value = p.Id.ToString(),
                             Text = p.Nombre
                         }).ToList();
+
+                    model.Provincias = _context.Provincias
+                        .Where(p => p.PaisId == model.PaisId) // si querés filtrar por el país seleccionado
+                        .Select(p => new SelectListItem
+                        {
+                            Value = p.Id.ToString(),
+                            Text = p.Nombre
+                        }).ToList();
+
                     return View(model);
                 }
             }
             return View(model);
+        }
+
+
+        [HttpGet]
+        public JsonResult GetProvincias(int paisId)
+        {
+            var provincias = _context.Provincias
+                .Where(p => p.PaisId == paisId)
+                .Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Nombre
+                }).ToList();
+
+            return Json(provincias);
         }
 
 
@@ -140,7 +168,7 @@ namespace BookTrader.Controllers
             {
                 var user = await _userManager.FindByNameAsync(model.Email);
 
-                if(user == null)
+                if (user == null)
                 {
                     ModelState.AddModelError("", "Usuario inexistente!");
                     return View(model);
@@ -170,10 +198,10 @@ namespace BookTrader.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(model.Email);
-                if(user != null)
+                if (user != null)
                 {
                     var result = await _userManager.RemovePasswordAsync(user);
-                    if(result.Succeeded)
+                    if (result.Succeeded)
                     {
                         result = await _userManager.AddPasswordAsync(user, model.NewPassword);
                         return RedirectToAction("Login", "Account");
@@ -191,7 +219,7 @@ namespace BookTrader.Controllers
                 else
                 {
                     ModelState.AddModelError("", "Email no encontrado!");
-                    return View(model); 
+                    return View(model);
 
                 }
             }

@@ -34,10 +34,18 @@
 
             <div class="mb-3">
                 <label asp-for="PaisId" class="form-label">País</label>
-                <select asp-for="PaisId" class="form-select" asp-items="Model.Paises">
+                <select asp-for="PaisId" class="form-select" asp-items="Model.Paises" id="pais-select">
                     <option value="">-- Selecciona un país --</option>
                 </select>
                 <span asp-validation-for="PaisId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ProvinciaId" class="form-label">Provincia</label>
+                <select asp-for="ProvinciaId" class="form-select" asp-items="Model.Provincias" id="provincia-select">
+                    <option value="">-- Selecciona una provincia --</option>
+                </select>
+                <span asp-validation-for="ProvinciaId" class="text-danger"></span>
             </div>
 
             
@@ -56,4 +64,30 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");
     }
+
+    <script>
+        document.getElementById("pais-select").addEventListener("change", function () {
+            var paisId = this.value;
+            var provinciaSelect = document.getElementById("provincia-select");
+
+            // Limpiar provincias actuales
+            provinciaSelect.innerHTML = '<option value="">-- Selecciona una provincia --</option>';
+
+            if (paisId) {
+                fetch(`/Account/GetProvincias?paisId=${paisId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(function (provincia) {
+                            var option = document.createElement("option");
+                            option.value = provincia.value;
+                            option.text = provincia.text;
+                            provinciaSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error("Error al cargar provincias:", error));
+            }
+        });
+    </script>
+}
+
 }
