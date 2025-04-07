@@ -127,6 +127,14 @@ namespace BookTrader.Controllers
         }
 
 
+        [Authorize]
+        public async Task<IActionResult> Comprar()
+        {
+            
+            return View();
+        }
+
+
 
     }
 }
