@@ -27,7 +27,6 @@ namespace BookTrader.Controllers
 
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] InsertSugerenciaDTO insertSugerenciaDTO)
         {
