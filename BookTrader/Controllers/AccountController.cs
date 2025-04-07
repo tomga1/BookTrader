@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -66,7 +67,9 @@ namespace BookTrader.Controllers
                     }).ToList(),
 
                 // Opcional: si querés dejarlo vacío al principio
-                Provincias = new List<SelectListItem>()
+                Provincias = new List<SelectListItem>(),
+                Localidades = new List<SelectListItem>()
+
             };
 
             return View(model);
@@ -79,6 +82,18 @@ namespace BookTrader.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                // 1. Traer la localidad desde el contexto
+                var localidad = await _context.Localidades
+                    .Include(l => l.Provincia)
+                    .ThenInclude(p => p.Pais)
+                    .FirstOrDefaultAsync(l => l.Id == model.LocalidadId.Value);
+
+                if (localidad == null)
+                {
+                    ModelState.AddModelError("LocalidadId", "La localidad seleccionada no es válida.");
+                    return View(model); // Podés reconstruir combos si querés acá
+                }
                 Users users = new Users
                 {
                     NombreCompleto = model.Name,
@@ -86,12 +101,20 @@ namespace BookTrader.Controllers
                     UserName = model.Email,
                     NormalizedUserName = model.Email.ToUpper(),
                     NormalizedEmail = model.Email.ToUpper(),
+                    Localidad = localidad // acá le pasás el objeto completo
                 };
 
                 var result = await _userManager.CreateAsync(users, model.Password);
 
                 if (result.Succeeded)
                 {
+
+                    // Ahora tenés:
+                    var nombreLocalidad = localidad.Nombre;
+                    var nombreProvincia = localidad.Provincia.Nombre;
+                    var nombrePais = localidad.Provincia.Pais.Nombre;
+
+
                     var roleExist = await _roleManager.RoleExistsAsync("User");
 
                     if (!roleExist)
@@ -130,6 +153,14 @@ namespace BookTrader.Controllers
                             Text = p.Nombre
                         }).ToList();
 
+                    model.Localidades = _context.Localidades
+                         .Where(l => l.ProvinciaId == model.ProvinciaId)
+                         .Select(l => new SelectListItem
+                         {
+                             Value = l.Id.ToString(),
+                             Text = l.Nombre
+                         }).ToList();
+
                     return View(model);
                 }
             }
@@ -149,6 +180,20 @@ namespace BookTrader.Controllers
                 }).ToList();
 
             return Json(provincias);
+        }
+
+        [HttpGet]
+        public JsonResult GetLocalidades(int provinciaId)
+        {
+            var localidades = _context.Localidades
+                .Where(l => l.ProvinciaId == provinciaId)
+                .Select(l => new SelectListItem
+                {
+                    Value = l.Id.ToString(),
+                    Text = l.Nombre
+                }).ToList();
+
+            return Json(localidades);
         }
 
 

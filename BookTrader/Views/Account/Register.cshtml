@@ -48,6 +48,14 @@
                 <span asp-validation-for="ProvinciaId" class="text-danger"></span>
             </div>
 
+            <div class="mb-3">
+                <label asp-for="LocalidadId" class="form-label">Localidad</label>
+                <select asp-for="LocalidadId" class="form-select" asp-items="Model.Localidades" id="localidad-select">
+                    <option value="">-- Selecciona una localidad --</option>
+                </select>
+                <span asp-validation-for="LocalidadId" class="text-danger"></span>
+            </div>
+
             
             <input type="submit" value="Registro" class="btn btn-success w-100 p-2" />
             <p class="text-center mt-2">
@@ -88,6 +96,30 @@
             }
         });
     </script>
+    <script>
+        document.getElementById("provincia-select").addEventListener("change", function () {
+            var provinciaId = this.value;
+            var localidadSelect = document.getElementById("localidad-select");
+
+            // Limpiar localidades actuales
+            localidadSelect.innerHTML = '<option value="">-- Selecciona una localidad --</option>';
+
+            if (provinciaId) {
+                fetch(`/Account/GetLocalidades?provinciaId=${provinciaId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(function (localidad) {
+                            var option = document.createElement("option");
+                            option.value = localidad.value;
+                            option.text = localidad.text;
+                            localidadSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error("Error al cargar localidades:", error));
+            }
+        });
+    </script>
+
 }
 
 }
