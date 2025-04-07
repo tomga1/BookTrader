@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System.Diagnostics;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BookTrader.Controllers
 {
@@ -19,19 +20,37 @@ namespace BookTrader.Controllers
             _context = context; 
         }
 
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, int pagina = 1)
         {
-            var libros = await _context.Libros
+            int registrosPorPagina = 24;
+
+            var libros = _context.Libros
                 .Include(l => l.Categoria)  // Asegúrate de incluir la propiedad de navegación 'Categoria'
-                .Where(l => l.EstadoPublicacion == EstadoPublicacion.Aprobado)
-                .ToListAsync();
+                .Where(l => l.EstadoPublicacion == EstadoPublicacion.Aprobado);
 
             if(!string.IsNullOrEmpty(searchString))
             {
-                libros = libros.Where(n => n.Nombre.Contains(searchString) || n.Autor.Contains(searchString)).ToList();
+                libros = libros.Where(n => n.Nombre.Contains(searchString) || n.Autor.Contains(searchString));
             }
 
-            return View(libros);
+            int totalRegistros = await libros.CountAsync();
+
+
+
+            var libros2 = await libros
+            .OrderBy(l => l.Nombre) // O el orden que prefieras
+            .Skip((pagina - 1) * registrosPorPagina)
+            .Take(registrosPorPagina)
+            .ToListAsync();
+
+            var modeloPaginado = new PaginacionViewModel<Libros>
+            {
+                Items = libros2,
+                PaginaActual = pagina,
+                TotalPaginas = (int)Math.Ceiling((double)totalRegistros / registrosPorPagina)
+            };
+
+            return View(modeloPaginado);
         }
 
 
