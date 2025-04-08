@@ -25,11 +25,10 @@ body {
     color: black;
 }
 
-
-
-    button:hover {
-        background-color: #005f73;
-    }
+.g-3, .gy-3 {
+    --bs-gutter-y: 1rem;
+    margin-bottom: 10rem;
+}
 
 .feedback-btn {
     position: fixed;
