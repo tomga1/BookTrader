@@ -2,6 +2,7 @@
 using BookTrader.Models;
 using BookTrader.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,13 +18,15 @@ namespace BookTrader.Controllers
         private readonly UserManager<Users> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
+        private readonly EmailSender _emailSender;
 
-        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
+        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context, EmailSender emailSender)
         {
             this._signInManager = signInManager;
             this._userManager = userManager;
             this._roleManager = roleManager;
             this._context = context;
+            this._emailSender = emailSender;
         }
 
         [HttpGet]
@@ -41,6 +44,19 @@ namespace BookTrader.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+
+                    if (user == null)
+                    {
+                        ModelState.AddModelError("", "El email o la contraseña son incorrectos.");
+                        return View(model);
+                    }
+                    if (!user.EmailConfirmed)
+                    {
+                        ModelState.AddModelError("", "Debés confirmar tu correo antes de iniciar sesión.");
+                        return View(model);
+                    }
+
                     var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
                     if (result.Succeeded)
@@ -114,7 +130,20 @@ namespace BookTrader.Controllers
                     Localidad = localidad // acá le pasás el objeto completo
                 };
 
+
+
+
                 var result = await _userManager.CreateAsync(users, model.Password);
+
+
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(users);
+                var confirmationLink = Url.Action("ConfirmEmail", "Account",
+                    new { userId = users.Id, token = token }, Request.Scheme);
+
+                await _emailSender.SendEmailAsync(users.Email, "Confirmá tu cuenta",
+                    $"Hacé clic en este enlace para confirmar tu cuenta: <a href='{confirmationLink}'>Confirmar</a>");
+
+
 
                 if (result.Succeeded)
                 {
@@ -136,7 +165,9 @@ namespace BookTrader.Controllers
 
                     await _userManager.AddToRoleAsync(users, "User");
 
+
                     await _signInManager.SignInAsync(users, isPersistent: false);
+
 
                     return RedirectToAction("Login", "Account");
                 }
@@ -293,5 +324,29 @@ namespace BookTrader.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (userId == null || token == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound();
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return View("ConfirmEmail"); // creá esta vista
+            }
+
+            return View("Error");
+        }
+
     }
 }
