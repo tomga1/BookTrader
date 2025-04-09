@@ -50,7 +50,7 @@ namespace BookTrader.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categorias");
+                    b.ToTable("Categorias", (string)null);
                 });
 
             modelBuilder.Entity("BookTrader.Models.Condiciones", b =>
@@ -81,7 +81,7 @@ namespace BookTrader.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Condiciones");
+                    b.ToTable("Condiciones", (string)null);
                 });
 
             modelBuilder.Entity("BookTrader.Models.IdiomasEntity", b =>
@@ -109,7 +109,7 @@ namespace BookTrader.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Idiomas");
+                    b.ToTable("Idiomas", (string)null);
                 });
 
             modelBuilder.Entity("BookTrader.Models.Libros", b =>
@@ -190,7 +190,7 @@ namespace BookTrader.Migrations
 
                     b.HasIndex("IdiomaId");
 
-                    b.ToTable("Libros");
+                    b.ToTable("Libros", (string)null);
                 });
 
             modelBuilder.Entity("BookTrader.Models.Localidades", b =>
@@ -212,7 +212,7 @@ namespace BookTrader.Migrations
 
                     b.HasIndex("ProvinciaId");
 
-                    b.ToTable("Localidades");
+                    b.ToTable("Localidades", (string)null);
                 });
 
             modelBuilder.Entity("BookTrader.Models.Paises", b =>
@@ -229,7 +229,7 @@ namespace BookTrader.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Paises");
+                    b.ToTable("Paises", (string)null);
                 });
 
             modelBuilder.Entity("BookTrader.Models.Provincias", b =>
@@ -251,7 +251,7 @@ namespace BookTrader.Migrations
 
                     b.HasIndex("PaisId");
 
-                    b.ToTable("Provincias");
+                    b.ToTable("Provincias", (string)null);
                 });
 
             modelBuilder.Entity("BookTrader.Models.Sugerencias", b =>
@@ -274,7 +274,7 @@ namespace BookTrader.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sugerencias");
+                    b.ToTable("Sugerencias", (string)null);
                 });
 
             modelBuilder.Entity("BookTrader.Models.Users", b =>

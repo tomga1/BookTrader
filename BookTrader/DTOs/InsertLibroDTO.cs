@@ -26,6 +26,7 @@ namespace BookTrader.DTOs
         public int? IdUsuario { get; set; }
 
         public int cantPaginas { get; set; }
+        public int FormatoId { get; set; }
 
 
     }
