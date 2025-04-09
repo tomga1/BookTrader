@@ -35,7 +35,7 @@ namespace BookTrader.Models
 
         public virtual IdiomasEntity? Idioma {  get; set; }
         public int IdiomaId { get; set; } // 👈 FK correcta
-        public virtual FormatoEntity? Formato { get; set; }
         public int FormatoId { get; set; }
+        public virtual FormatoEntity? Formato { get; set; }
     }
 }
