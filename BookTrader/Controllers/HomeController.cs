@@ -22,7 +22,7 @@ namespace BookTrader.Controllers
 
         public async Task<IActionResult> Index(string searchString, int pagina = 1)
         {
-            int registrosPorPagina = 24;
+            int registrosPorPagina = 16;
 
             var libros = _context.Libros
                 .Include(l => l.Categoria)  // Asegúrate de incluir la propiedad de navegación 'Categoria'
