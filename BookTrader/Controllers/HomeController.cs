@@ -26,6 +26,8 @@ namespace BookTrader.Controllers
 
             var libros = _context.Libros
                 .Include(l => l.Categoria)  // Asegúrate de incluir la propiedad de navegación 'Categoria'
+                .Include(l => l.Idioma)
+                .Include(l => l.Condicion)
                 .Where(l => l.EstadoPublicacion == EstadoPublicacion.Aprobado);
 
             if(!string.IsNullOrEmpty(searchString))

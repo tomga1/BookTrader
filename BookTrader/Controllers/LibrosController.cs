@@ -55,47 +55,57 @@ namespace BookTrader.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromForm] InsertLibroDTO insertLibroDTO, IFormFile imagenArchivo)
         {
-            if (!string.IsNullOrEmpty(insertLibroDTO.ImagenUrl) && imagenArchivo != null)
+
+            try
             {
-                ModelState.AddModelError("", "Solo puedes subir una imagen por URL o por archivo, no ambas.");
-                return View(insertLibroDTO);
-            }
-
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.GetUserAsync(User);
-
-                string? idUsuario = user?.Id; 
-                
-                var libro = _mapper.Map<Libros>(insertLibroDTO);
-                libro.IdUsuario = idUsuario;
-
-                // Manejar la imagen
-                if (imagenArchivo != null)
+                if (!string.IsNullOrEmpty(insertLibroDTO.ImagenUrl) && imagenArchivo != null)
                 {
-                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + imagenArchivo.FileName;
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    ModelState.AddModelError("", "Solo puedes subir una imagen por URL o por archivo, no ambas.");
+                    return View(insertLibroDTO);
+                }
 
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                if (ModelState.IsValid)
+                {
+                    var user = await _userManager.GetUserAsync(User);
+
+                    string? idUsuario = user?.Id;
+
+                    var libro = _mapper.Map<Libros>(insertLibroDTO);
+                    libro.IdUsuario = idUsuario;
+
+                    // Manejar la imagen
+                    if (imagenArchivo != null)
                     {
-                        await imagenArchivo.CopyToAsync(fileStream);
+                        var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + imagenArchivo.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imagenArchivo.CopyToAsync(fileStream);
+                        }
+
+                        libro.ImagenUrl = "/images/" + uniqueFileName; // Guarda la ruta del archivo en la BD
+                    }
+                    else
+                    {
+                        libro.ImagenUrl = insertLibroDTO.ImagenUrl; // Guarda la URL si no subió archivo
                     }
 
-                    libro.ImagenUrl = "/images/" + uniqueFileName; // Guarda la ruta del archivo en la BD
-                }
-                else
-                {
-                    libro.ImagenUrl = insertLibroDTO.ImagenUrl; // Guarda la URL si no subió archivo
+                    _context.Libros.Add(libro);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("MisLibros", "Libros");
                 }
 
-                _context.Libros.Add(libro);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("MisLibros", "Libros");
+                return View();
             }
+            catch (Exception ex)
+            {
 
-            return View();
+                throw ex;
+            }
+            
         }
 
 

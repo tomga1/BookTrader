@@ -11,8 +11,8 @@ namespace BookTrader.DTOs
         [Required]
         public string Editorial { get; set; } = string.Empty;
         public string? ISBN { get; set; }
-        public int IdCategoria { get; set; }
-        public int IdCondicion { get; set; }
+        public int CategoriaId { get; set; }
+        public int CondicionId { get; set; }
         public int IdiomaId { get; set; }
         [Required]
         public decimal Precio { get; set; }

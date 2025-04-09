@@ -16,8 +16,8 @@ namespace BookTrader.Models
         [Required]
         public string? Editorial { get; set; }
         public string? ISBN { get; set; }
-        public int IdCategoria { get; set; } 
-        public int IdCondicion { get; set; }
+        public int CategoriaId { get; set; } 
+        public int CondicionId { get; set; }
 
         [Required]
         public decimal Precio { get; set; }
@@ -30,7 +30,8 @@ namespace BookTrader.Models
 
         // Relaciones con otras tablas (opcional)
         public virtual Categorias? Categoria { get; set; }
-        public Condiciones? Condicion { get; set; }  // Relación con la tabla Condiciones
+        public virtual Condiciones? Condicion { get; set; }  // Relación con la tabla Condiciones
+
         public int IdiomaId { get; set; } // 👈 FK correcta
 
         public virtual IdiomasEntity? Idioma {  get; set; }
