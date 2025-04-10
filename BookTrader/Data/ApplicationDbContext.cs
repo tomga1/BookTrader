@@ -32,6 +32,9 @@ namespace BookTrader.Data
 
 
             base.OnModelCreating(builder);
+
+
+
         }
     }
 }

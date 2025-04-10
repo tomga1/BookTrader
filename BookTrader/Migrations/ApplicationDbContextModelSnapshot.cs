@@ -50,7 +50,7 @@ namespace BookTrader.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categorias", (string)null);
+                    b.ToTable("Categorias");
                 });
 
             modelBuilder.Entity("BookTrader.Models.Condiciones", b =>
@@ -81,7 +81,35 @@ namespace BookTrader.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Condiciones", (string)null);
+                    b.ToTable("Condiciones");
+                });
+
+            modelBuilder.Entity("BookTrader.Models.FormatoEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FechaAgregado")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdUsuario")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Formato");
                 });
 
             modelBuilder.Entity("BookTrader.Models.IdiomasEntity", b =>
@@ -109,7 +137,7 @@ namespace BookTrader.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Idiomas", (string)null);
+                    b.ToTable("Idiomas");
                 });
 
             modelBuilder.Entity("BookTrader.Models.Libros", b =>
@@ -124,10 +152,10 @@ namespace BookTrader.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CategoriaId")
+                    b.Property<int>("CategoriaId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CondicionId")
+                    b.Property<int>("CondicionId")
                         .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
@@ -149,14 +177,11 @@ namespace BookTrader.Migrations
                     b.Property<DateTime>("FechaPublicacion")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("FormatoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ISBN")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IdCategoria")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCondicion")
-                        .HasColumnType("int");
 
                     b.Property<string>("IdUsuario")
                         .HasColumnType("nvarchar(max)");
@@ -188,9 +213,11 @@ namespace BookTrader.Migrations
 
                     b.HasIndex("CondicionId");
 
+                    b.HasIndex("FormatoId");
+
                     b.HasIndex("IdiomaId");
 
-                    b.ToTable("Libros", (string)null);
+                    b.ToTable("Libros");
                 });
 
             modelBuilder.Entity("BookTrader.Models.Localidades", b =>
@@ -212,7 +239,7 @@ namespace BookTrader.Migrations
 
                     b.HasIndex("ProvinciaId");
 
-                    b.ToTable("Localidades", (string)null);
+                    b.ToTable("Localidades");
                 });
 
             modelBuilder.Entity("BookTrader.Models.Paises", b =>
@@ -229,7 +256,7 @@ namespace BookTrader.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Paises", (string)null);
+                    b.ToTable("Paises");
                 });
 
             modelBuilder.Entity("BookTrader.Models.Provincias", b =>
@@ -251,7 +278,7 @@ namespace BookTrader.Migrations
 
                     b.HasIndex("PaisId");
 
-                    b.ToTable("Provincias", (string)null);
+                    b.ToTable("Provincias");
                 });
 
             modelBuilder.Entity("BookTrader.Models.Sugerencias", b =>
@@ -274,7 +301,7 @@ namespace BookTrader.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sugerencias", (string)null);
+                    b.ToTable("Sugerencias");
                 });
 
             modelBuilder.Entity("BookTrader.Models.Users", b =>
@@ -487,11 +514,21 @@ namespace BookTrader.Migrations
                 {
                     b.HasOne("BookTrader.Models.Categorias", "Categoria")
                         .WithMany("Libros")
-                        .HasForeignKey("CategoriaId");
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BookTrader.Models.Condiciones", "Condicion")
                         .WithMany()
-                        .HasForeignKey("CondicionId");
+                        .HasForeignKey("CondicionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BookTrader.Models.FormatoEntity", "Formato")
+                        .WithMany("Libros")
+                        .HasForeignKey("FormatoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BookTrader.Models.IdiomasEntity", "Idioma")
                         .WithMany("Libros")
@@ -502,6 +539,8 @@ namespace BookTrader.Migrations
                     b.Navigation("Categoria");
 
                     b.Navigation("Condicion");
+
+                    b.Navigation("Formato");
 
                     b.Navigation("Idioma");
                 });
@@ -589,6 +628,11 @@ namespace BookTrader.Migrations
                 });
 
             modelBuilder.Entity("BookTrader.Models.Categorias", b =>
+                {
+                    b.Navigation("Libros");
+                });
+
+            modelBuilder.Entity("BookTrader.Models.FormatoEntity", b =>
                 {
                     b.Navigation("Libros");
                 });
