@@ -24,27 +24,32 @@ namespace BookTrader.Controllers
         {
             int registrosPorPagina = 16;
 
+            // Consulta para obtener los libros aprobados
             var libros = _context.Libros
-                .Include(l => l.Categoria)  // Asegúrate de incluir la propiedad de navegación 'Categoria'
+                .Include(l => l.Categoria)  // Incluye la información de la categoría
                 .Include(l => l.Idioma)
                 .Include(l => l.Condicion)
                 .Where(l => l.EstadoPublicacion == EstadoPublicacion.Aprobado);
 
-            if(!string.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 libros = libros.Where(n => n.Nombre.Contains(searchString) || n.Autor.Contains(searchString));
             }
 
             int totalRegistros = await libros.CountAsync();
 
-
-
             var libros2 = await libros
-            .OrderBy(l => l.Nombre) // O el orden que prefieras
-            .Skip((pagina - 1) * registrosPorPagina)
-            .Take(registrosPorPagina)
-            .ToListAsync();
+                .OrderBy(l => l.Nombre) // Ordena según la lógica que requieras
+                .Skip((pagina - 1) * registrosPorPagina)
+                .Take(registrosPorPagina)
+                .ToListAsync();
 
+            // Obtén la lista de categorías y sus subcategorías
+            var categorias = await _context.Categorias
+                .Include(c => c.SubCategorias)  // Asegúrate de que la entidad Categoria tenga la propiedad de navegación SubCategorias
+                .ToListAsync();
+
+            // Crea el modelo de paginación para los libros
             var modeloPaginado = new PaginacionViewModel<Libros>
             {
                 Items = libros2,
@@ -52,8 +57,16 @@ namespace BookTrader.Controllers
                 TotalPaginas = (int)Math.Ceiling((double)totalRegistros / registrosPorPagina)
             };
 
-            return View(modeloPaginado);
+            // Crea el HomeViewModel combinando ambas colecciones
+            var viewModel = new BookTrader.Models.HomeViewModel
+            {
+                LibrosPaginados = modeloPaginado,
+                Categorias = categorias
+            };
+
+            return View(viewModel);
         }
+
 
 
         public IActionResult SobreNosotrosView()

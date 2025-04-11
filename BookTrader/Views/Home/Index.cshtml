@@ -1,4 +1,4 @@
-﻿@model BookTrader.Models.PaginacionViewModel<BookTrader.Models.Libros>
+﻿@model BookTrader.Models.HomeViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -8,42 +8,57 @@
 </div>
 
 
-<div class="container-fluid">
+<div class="container-fluid mb-5">
     <div class="row">
 
         <aside class="col-md-2 bg-light p-3 border-end d-none d-md-block" style="min-height: 100vh;">
             <div class="accordion" id="filtrosCategorias">
-                <h3>Categorias</h3>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingGeneral">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGeneral">
-                            General
-                        </button>
-                    </h2>
-                    <div id="collapseGeneral" class="accordion-collapse collapse" data-bs-parent="#filtrosCategorias">
-                        <div class="accordion-body">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="Desarrollo personal" id="desarrolloPersonal">
-                                <label class="form-check-label" for="desarrolloPersonal">Desarrollo personal</label>
+                <h3>Categorías</h3>
+                @foreach (var categoria in Model.Categorias)
+                {
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingCategoria_@categoria.Id">
+                            <button class="accordion-button collapsed"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapseCategoria_@categoria.Id">
+                                @categoria.Nombre
+                            </button>
+                        </h2>
+                        <div id="collapseCategoria_@categoria.Id"
+                             class="accordion-collapse collapse"
+                             data-bs-parent="#filtrosCategorias">
+                            <div class="accordion-body">
+                                @if (categoria.SubCategorias != null && categoria.SubCategorias.Any())
+                                {
+                                    <ul class="list-group">
+                                        @foreach (var sub in categoria.SubCategorias)
+                                        {
+                                            <li class="list-group-item">
+                                                <input type="checkbox" id="subcategoria_@sub.Id" value="@sub.Id" />
+                                                <label for="subcategoria_@sub.Id"> @sub.Nombre </label>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p class="text-muted">No hay subcategorías</p>
+                                }
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="Finanzas" id="finanzas">
-                                <label class="form-check-label" for="finanzas">Finanzas</label>
-                            </div>
-                            <!-- Más subcategorías -->
                         </div>
                     </div>
-                </div>
-
-                <!-- Repetir para otras categorías -->
+                }
             </div>
         </aside>
+
+
 
 
         <div class="col-10">
             <div class="row">
 
-                @foreach (var libro in Model.Items)
+                @foreach (var libro in Model.LibrosPaginados.Items)
                 {
                     <div class="col-md-3 mb-4">
                         <div class="card" style="width: 18rem;">
@@ -100,29 +115,30 @@
         <div class="d-flex justify-content-center mt-4">
             <nav>
                 <ul class="pagination">
-                    @if (Model.TienePaginaAnterior)
+                    @if (Model.LibrosPaginados.TienePaginaAnterior)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-route-pagina="@(Model.PaginaActual - 1)" asp-route-searchString="@ViewData["SearchString"]">Anterior</a>
+                            <a class="page-link" asp-route-pagina="@(Model.LibrosPaginados.PaginaActual - 1)" asp-route-searchString="@ViewData["SearchString"]">Anterior</a>
                         </li>
                     }
 
-                    @for (int i = 1; i <= Model.TotalPaginas; i++)
+                    @for (int i = 1; i <= Model.LibrosPaginados.TotalPaginas; i++)
                     {
-                        <li class="page-item @(i == Model.PaginaActual ? "active" : "")">
+                        <li class="page-item @(i == Model.LibrosPaginados.PaginaActual ? "active" : "")">
                             <a class="page-link" asp-route-pagina="@i" asp-route-searchString="@ViewData["SearchString"]">@i</a>
                         </li>
                     }
 
-                    @if (Model.TienePaginaSiguiente)
+                    @if (Model.LibrosPaginados.TienePaginaSiguiente)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-route-pagina="@(Model.PaginaActual + 1)" asp-route-searchString="@ViewData["SearchString"]">Siguiente</a>
+                            <a class="page-link" asp-route-pagina="@(Model.LibrosPaginados.PaginaActual + 1)" asp-route-searchString="@ViewData["SearchString"]">Siguiente</a>
                         </li>
                     }
                 </ul>
             </nav>
         </div>
+
 
 
     </div>
