@@ -67,10 +67,11 @@
                                 <h5 class="card-title">@libro.Nombre</h5>
                                 <p class="card-text">@libro.Autor</p>
                                 <p class="card-text"><strong>Editorial:</strong> @libro.Editorial</p>
-                                <p class="card-text"><strong>Precio:</strong> $@libro.Precio</p>
+                                <p class="card-text fw-bold"><strong>Precio:</strong> $@libro.Precio</p>
                             </div>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><strong>Categoría:</strong> @libro.Categoria?.Nombre</li>
+                                <li class="list-group-item"><strong>Sub-Categoria:</strong> @libro.SubCategorias?.Nombre</li>
                                 <li class="list-group-item"><strong>Estado:</strong> @libro.Condicion?.Nombre</li>
                             </ul>
                             <div class="card-body">
