@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookTrader.Models
 {
@@ -39,5 +40,9 @@ namespace BookTrader.Models
         public virtual FormatoEntity? Formato { get; set; }
         public int SubCategoriasId { get; set; }
         public virtual SubCategorias? SubCategorias { get; set;}
+
+
+        public string PublicadorId { get; set; }
+        public Users Publicador { get; set; } 
     }
 }

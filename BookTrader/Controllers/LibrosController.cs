@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Runtime.InteropServices;
 
 namespace BookTrader.Controllers
 {
@@ -72,8 +73,13 @@ namespace BookTrader.Controllers
 
                     var libro = _mapper.Map<Libros>(insertLibroDTO);
                     libro.IdUsuario = idUsuario;
+                    libro.PublicadorId = idUsuario;
+                    libro.SubCategoriasId = 1; 
+                    libro.CondicionId   = 1;
+                    libro.FormatoId = 1;    
 
                     // Manejar la imagen
+
                     if (imagenArchivo != null)
                     {
                         var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");

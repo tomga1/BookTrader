@@ -73,6 +73,8 @@
                                 <li class="list-group-item"><strong>Categoría:</strong> @libro.Categoria?.Nombre</li>
                                 <li class="list-group-item"><strong>Sub-Categoria:</strong> @libro.SubCategorias?.Nombre</li>
                                 <li class="list-group-item"><strong>Estado:</strong> @libro.Condicion?.Nombre</li>
+                                <li class="list-group-item"><strong>Publicado por:</strong> @libro.Publicador?.NombreCompleto</li>
+                                <li class="list-group-item"><strong>Ubicacion:</strong> @libro.Publicador.Localidad?.Nombre</li>
                             </ul>
                             <div class="card-body">
                                 <a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalLibro_@libro.Id">Más Info</a>

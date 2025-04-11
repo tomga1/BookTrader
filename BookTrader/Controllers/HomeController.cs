@@ -29,6 +29,7 @@ namespace BookTrader.Controllers
                 .Include(l => l.Categoria)  // Incluye la información de la categoría
                 .Include(l => l.Idioma)
                 .Include(l => l.Condicion)
+                .Include(l => l.Publicador)
                 .Where(l => l.EstadoPublicacion == EstadoPublicacion.Aprobado);
 
             if (!string.IsNullOrEmpty(searchString))

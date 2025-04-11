@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookTrader.DTOs
 {
@@ -27,7 +28,7 @@ namespace BookTrader.DTOs
 
         public int cantPaginas { get; set; }
         public int FormatoId { get; set; }
-
+      
 
     }
 }
