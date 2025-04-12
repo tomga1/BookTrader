@@ -37,8 +37,15 @@
 
         <div class="mb-3">
             <label for="categoria" class="form-label">Categoría</label>
-            <select class="form-select" id="categoria" name="CategoriaId">
+            <select class="form-select" id="categoria" name="CategoriaId" onchange="cargarSubcategorias(this.value)">
                 @await Component.InvokeAsync("Categorias", new { dropdown = false })
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="subcategoria" class="form-label">Sub-Categoria</label>
+            <select class="form-select" id="subcategoria" name="SubCategoriaId">
+                <option value="">Seleccioa una Sub-Categoria</option>
             </select>
         </div>
 
@@ -82,3 +89,22 @@
             <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function cargarSubcategorias(categoriaId) {
+        $.ajax({
+            url: '/SubCategorias/Lista',  // Asegurate de que la ruta coincide con el endpoint en el controlador
+            data: { categoriaId: categoriaId },
+            type: 'GET',
+            success: function (data) {
+                // Reemplaza el contenido del dropdown de subcategorías con la respuesta HTML
+                $('#subcategoria').html(data);
+            },
+            error: function () {
+                alert('Ocurrió un error al cargar las subcategorías.');
+            }
+        });
+    }
+</script>

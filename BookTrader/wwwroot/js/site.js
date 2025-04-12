@@ -63,6 +63,19 @@ function validarImagen(tipo) {
 }
 
 
+function cargarSubcategorias(categoriaId) {
+    $.ajax({
+        url: '/SubCategorias/Lista',  // Asegúrate de que esta ruta sea correcta
+        data: { categoriaId: categoriaId },
+        type: 'GET',
+        success: function (data) {
+            $('#subcategoria').html(data);
+        },
+        error: function () {
+            alert('Ocurrió un error al cargar las subcategorías.');
+        }
+    });
+}
 
 
 

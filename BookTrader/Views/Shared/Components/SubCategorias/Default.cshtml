@@ -1,0 +1,13 @@
+﻿@model IEnumerable<BookTrader.Models.SubCategorias>
+
+@if (!Model.Any())
+{
+    <option value="">No hay subcategorías disponibles</option>
+}
+else
+{
+    @foreach (var subcategoria in Model)
+    {
+        <option value="@subcategoria.Id">@subcategoria.Nombre</option>
+    }
+}
