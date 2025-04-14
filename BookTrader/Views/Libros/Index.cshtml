@@ -9,94 +9,104 @@
 
 <div class="mb-6 mt-5" style="margin-bottom:100px">
     <form id="formAgregarLibro" method="post" enctype="multipart/form-data" action="@Url.Action("Create", "Libros")">
-        <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre del Libro</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" required>
+        <div class="row">
+            <!-- Columna izquierda -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre del Libro</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="autor" class="form-label">Autor</label>
+                    <input type="text" class="form-control" id="autor" name="autor" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editorial" class="form-label">Editorial</label>
+                    <input type="text" class="form-control" id="editorial" name="editorial" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="isbn" class="form-label">ISBN</label>
+                    <input type="text" class="form-control" id="isbn" name="isbn">
+                </div>
+
+                <div class="mb-3">
+                    <label for="cantPaginas" class="form-label">Cantidad de páginas</label>
+                    <input type="number" class="form-control" id="cantPaginas" name="cantPaginas" min="1" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="precio" class="form-label">Precio</label>
+                    <input type="number" class="form-control" id="precio" name="precio" required step="0.01">
+                </div>
+
+                <div class="mb-3">
+                    <label for="imagenArchivo" class="form-label">Subir Imagen</label>
+                    <input type="file" class="form-control" id="imagenArchivo" name="imagenArchivo" accept="image/*" required onchange="validarImagen('archivo')">
+                </div>
+
+                <div class="mb-3">
+                    <img id="previewImg" src="" class="img-fluid" style="max-width: 200px; display: none;">
+                </div>
+            </div>
+
+            <!-- Columna derecha -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoría</label>
+                    <select class="form-select" id="categoria" name="CategoriaId" onchange="cargarSubcategorias(this.value)">
+                        @await Component.InvokeAsync("Categorias", new { dropdown = false })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="subcategoria" class="form-label">Sub-Categoría</label>
+                    <select class="form-select" id="subcategoria" name="SubCategoriasId">
+                        <option value="">Selecciona una Sub-Categoría</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="condicion" class="form-label">Condición</label>
+                    <select class="form-select" id="condicion" name="CondicionId">
+                        @await Component.InvokeAsync("Condiciones", new { dropdown = false })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="formato" class="form-label">Formato</label>
+                    <select class="form-select" id="formato" name="FormatoId">
+                        @await Component.InvokeAsync("Formato", new { dropdown = false })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="idioma" class="form-label">Idioma</label>
+                    <select class="form-select" id="idioma" name="IdiomaId">
+                        @await Component.InvokeAsync("Idiomas", new { dropdown = false })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="masInfo" class="form-label">Reseña</label>
+                    <textarea class="form-control" id="masInfo" name="masInfo" rows="3"></textarea>
+                </div>
+
+               @*  <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                </div> *@
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="autor" class="form-label">Autor</label>
-            <input type="text" class="form-control" id="autor" name="autor" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="editorial" class="form-label">Editorial</label>
-            <input type="text" class="form-control" id="editorial" name="editorial" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="isbn" class="form-label">ISBN</label>
-            <input type="text" class="form-control" id="isbn" name="isbn">
-        </div>
-
-        <div class="mb-3">
-            <label for="cantPaginas" class="form-label">Cantidad de páginas</label>
-            <input type="number" class="form-control" id="cantPaginas" name="cantPaginas" min="1" required>
-        </div>
-
-
-        <div class="mb-3">
-            <label for="categoria" class="form-label">Categoría</label>
-            <select class="form-select" id="categoria" name="CategoriaId" onchange="cargarSubcategorias(this.value)">
-                @await Component.InvokeAsync("Categorias", new { dropdown = false })
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="subcategoria" class="form-label">Sub-Categoria</label>
-            <select class="form-select" id="subcategoria" name="SubCategoriasId">
-                <option value="">Seleccioa una Sub-Categoria</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="condicion" class="form-label">Condición</label>
-            <select class="form-select" id="condicion" name="CondicionId">
-                @await Component.InvokeAsync("Condiciones", new { dropdown = false })
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="formato" class="form-label">Formato</label>
-            <select class="form-select" id="condicion" name="FormatoId">
-                @await Component.InvokeAsync("Formato", new { dropdown = false })
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="idioma" class="form-label">Idioma</label>
-            <select class="form-select" id="idioma" name="IdiomaId">
-                @await Component.InvokeAsync("Idiomas", new { dropdown = false })
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="precio" class="form-label">Precio</label>
-            <input type="number" class="form-control" id="precio" name="precio" required step="0.01">
-        </div>
-
-        <div class="mb-3">
-            <label for="imagenArchivo" class="form-label">Subir Imagen</label>
-            <input type="file" class="form-control" id="imagenArchivo" name="imagenArchivo" accept="image/*" required onchange="validarImagen('archivo')">
-        </div>
-
-        <div class="mb-3">
-            <img id="previewImg" src="" class="img-fluid" style="max-width: 200px; display: none;">
-        </div>
-
-        <div class="mb-3">
-            <label for="masInfo" class="form-label">Más Información</label>
-            <textarea class="form-control" id="masInfo" name="masInfo" rows="3"></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label for="descripcion" class="form-label">Descripción</label>
-            <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
-        </div>
-
+        <div class="text-center mt-3">
             <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
     </form>
 </div>
+
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
