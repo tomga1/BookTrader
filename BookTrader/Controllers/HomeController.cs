@@ -14,10 +14,10 @@ namespace BookTrader.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
 
-        public HomeController(ApplicationDbContext context ,ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger)
         {
             _logger = logger;
-            _context = context; 
+            _context = context;
         }
 
         public async Task<IActionResult> Index(string searchString, int pagina = 1)
@@ -30,6 +30,9 @@ namespace BookTrader.Controllers
                 .Include(l => l.Idioma)
                 .Include(l => l.Condicion)
                 .Include(l => l.Publicador)
+                    .ThenInclude(u => u.Localidad)
+                        .ThenInclude(loc => loc.Provincia)
+                            .ThenInclude(p => p.Pais)
                 .Where(l => l.EstadoPublicacion == EstadoPublicacion.Aprobado);
 
             if (!string.IsNullOrEmpty(searchString))
@@ -75,13 +78,13 @@ namespace BookTrader.Controllers
             return View();
         }
 
-        [Authorize] 
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Admin()
         {
             return View();
@@ -99,6 +102,6 @@ namespace BookTrader.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-       
+
     }
 }
