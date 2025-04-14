@@ -33,7 +33,6 @@ namespace BookTrader.Models
         public virtual Categorias? Categoria { get; set; }
         public virtual Condiciones? Condicion { get; set; }  // Relación con la tabla Condicione
 
-
         public virtual IdiomasEntity? Idioma {  get; set; }
         public int IdiomaId { get; set; } // 👈 FK correcta
         public int FormatoId { get; set; }

@@ -74,7 +74,6 @@ namespace BookTrader.Controllers
                     var libro = _mapper.Map<Libros>(insertLibroDTO);
                     libro.IdUsuario = idUsuario;
                     libro.PublicadorId = idUsuario;
-                    //libro.SubCategoriasId = 1; 
                     libro.CondicionId   = 1;
                     libro.FormatoId = 1;    
 
