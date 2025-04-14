@@ -91,6 +91,7 @@ body {
     border: none;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border-radius: 12px;
+  
 }
 
     .card:hover {
@@ -149,3 +150,5 @@ body {
         background-color: #138496;
         border-color: #117a8b;
     }
+
+
