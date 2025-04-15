@@ -34,7 +34,7 @@ namespace BookTrader.Controllers
             int totalRegistros = await _context.Libros.CountAsync();
             var libros = await _context.Libros
                 .OrderBy(c => c.FechaAgregado) // Ordena por fecha
-                .Where(c => c.EstadoPublicacion.Descripcion == "Pendiente")
+                .Where(c => c.EstadoPublicacion.Nombre == "Aprobado")
                 .Skip((pagina - 1) * RegistrosPorPagina)
                 .Take(RegistrosPorPagina)
                 .ToListAsync();
