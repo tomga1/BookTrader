@@ -12,7 +12,7 @@
                     <th>Autor</th>
                     <th>Editorial</th>
                     <th>Precio</th>
-                    <th>Condicion</th>
+                    <th>Estado</th>
                     <th>Fecha</th>
 
                 </tr>
@@ -25,7 +25,7 @@
                         <td>@libro.Autor</td>
                         <td>@libro.Editorial</td>
                         <td>@libro.Precio</td>
-                        <td>@libro.Condicion</td>
+                        <td>@libro.EstadoPublicacion.Nombre</td>
                         <td>@libro.FechaAgregado</td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@libro.Id" class="btn btn-warning">Editar</a>

@@ -24,7 +24,6 @@ namespace BookTrader.Controllers
         {
             int registrosPorPagina = 16;
 
-            // Consulta para obtener los libros aprobados
             var libros = _context.Libros
                 .Include(l => l.Categoria)  // Incluye la información de la categoría
                 .Include(l => l.Idioma)
@@ -33,7 +32,7 @@ namespace BookTrader.Controllers
                     .ThenInclude(u => u.Localidad)
                         .ThenInclude(loc => loc.Provincia)
                             .ThenInclude(p => p.Pais)
-                .Where(l => l.EstadoPublicacion == EstadoPublicacion.Aprobado);
+                .Where(l => l.EstadoPublicacion.Descripcion == "Aprobado" );
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -48,7 +47,6 @@ namespace BookTrader.Controllers
                 .Take(registrosPorPagina)
                 .ToListAsync();
 
-            // Obtén la lista de categorías y sus subcategorías
             var categorias = await _context.Categorias
                 .Include(c => c.SubCategorias)  // Asegúrate de que la entidad Categoria tenga la propiedad de navegación SubCategorias
                 .ToListAsync();

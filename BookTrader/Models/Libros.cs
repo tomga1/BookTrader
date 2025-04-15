@@ -3,12 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BookTrader.Models
 {
-    public enum EstadoPublicacion
-    {
-        Pendiente,
-        Aprobado,
-        Rechazado
-    }
 
     public class Libros : EntityBase
     {
@@ -27,7 +21,6 @@ namespace BookTrader.Models
         public string? MasInfo { get; set; }
         public int cantPaginas { get; set; }
 
-        public EstadoPublicacion EstadoPublicacion { get; set; } = EstadoPublicacion.Pendiente;
 
         // Relaciones con otras tablas (opcional)
         public virtual Categorias? Categoria { get; set; }
@@ -42,6 +35,10 @@ namespace BookTrader.Models
 
 
         public string PublicadorId { get; set; }
-        public Users Publicador { get; set; } 
+        public Users Publicador { get; set; }
+        public virtual EstadoPublicacionEntity? EstadoPublicacion { get; set; }
+        public int EstadoPublicacionId { get; set; }
+
+
     }
 }

@@ -29,7 +29,9 @@ namespace BookTrader.DTOs
         public int cantPaginas { get; set; }
         public int FormatoId { get; set; }
         public int SubCategoriasId { get; set; }
+        public int EstadoPublicacionId { get; set; } = 1; 
 
 
-    }
+
+    }   
 }
