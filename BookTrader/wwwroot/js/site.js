@@ -11,11 +11,28 @@
     }).then((result) => {
         if (result.isConfirmed) {
             // Si el usuario confirma, enviamos la solicitud para eliminar
-            window.location.href = '/Categorias/Delete/' + id;
+            window.location.href = '/Libros/Delete/' + id;
         }
     });
 }
 
+function confirmarVenta(id) {    
+    Swal.fire({
+        title: '¿Marcar como vendido?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#198754',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, fue vendido!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Si el usuario confirma, enviamos la solicitud para eliminar
+            window.location.href = '/Libros/Vendido/' + id;
+        }
+    });
+}
 
 
 function validarImagen(tipo) {

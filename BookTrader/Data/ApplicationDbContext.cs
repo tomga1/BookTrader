@@ -22,6 +22,8 @@ namespace BookTrader.Data
         public DbSet<Localidades> Localidades { get; set; }
         public DbSet<FormatoEntity> Formato { get; set; }
         public DbSet<SubCategorias> SubCategorias { get; set; }
+        public DbSet<EstadoPublicacionEntity> EstadoPublicacionEntity { get; set; }
+
 
 
 

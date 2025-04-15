@@ -39,6 +39,9 @@ namespace BookTrader.Controllers
                 .Take(RegistrosPorPagina)
                 .ToListAsync();
 
+            
+
+            
 
             var modeloPaginado = new PaginacionViewModel<Libros>
             {
@@ -149,6 +152,40 @@ namespace BookTrader.Controllers
         }
 
 
+        [Authorize]
+        public async Task<IActionResult> Vendido(int id)
+        {
+            if(id != 0)
+            {
+                var libro = await _context.Libros.FindAsync(id); 
+
+                
+
+                if(libro != null)
+                {
+
+
+                    var estadoVendido = await _context.EstadoPublicacionEntity.FirstOrDefaultAsync(e => e.Nombre == "Vendido");
+
+                    if (estadoVendido == null) return NotFound("Estado Vendido no encontrado en la base de datos");
+
+
+                    libro.EstadoPublicacionId = estadoVendido.Id;
+                    _context.Libros.Update(libro);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("MisLibros");
+                }
+
+                else
+                {
+                    return NotFound();  
+                }
+
+            }
+
+            return BadRequest();    
+        }
 
     }
 }
