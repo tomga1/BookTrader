@@ -122,7 +122,7 @@ namespace BookTrader.Controllers
                 }
                 Users users = new Users
                 {
-                    NombreCompleto = model.Name,
+                    NombreCompleto = model.UserName,
                     Email = model.Email,
                     UserName = model.Email,
                     NormalizedUserName = model.Email.ToUpper(),

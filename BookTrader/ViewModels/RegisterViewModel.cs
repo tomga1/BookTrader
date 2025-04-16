@@ -7,7 +7,7 @@ namespace BookTrader.ViewModels
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "El nombre es requerido")]
-        public string Name { get; set; }
+        public string UserName { get; set; }
         [Required(ErrorMessage = "El nombre es requerido")]
         [EmailAddress]
         public string Email { get; set; }

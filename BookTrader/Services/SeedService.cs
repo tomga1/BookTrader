@@ -26,7 +26,7 @@ namespace BookTrader.Services
 
                 //agregar usuario admin
                 logger.LogInformation("Seeding admin user.");
-                var adminEmail = "admin@booktrader.com";
+                var adminEmail = "booktradersoporte@gmail.com";
                 if(await userManager.FindByEmailAsync(adminEmail) == null)
                 {
                     var adminUser = new Users
