@@ -34,7 +34,7 @@ namespace BookTrader.Controllers
             int totalRegistros = await _context.Libros.CountAsync();
             var libros = await _context.Libros
                 .OrderBy(c => c.FechaAgregado) // Ordena por fecha
-                .Where(c => c.EstadoPublicacion.Nombre == "Aprobado")
+                .Where(c => c.EstadoPublicacion.Nombre == "Aprobado" && c.EstadoPublicacion.Nombre != "Eliminado por usuario")
                 .Skip((pagina - 1) * RegistrosPorPagina)
                 .Take(RegistrosPorPagina)
                 .ToListAsync();
@@ -127,7 +127,7 @@ namespace BookTrader.Controllers
 
             var libros = await _context.Libros
                 .Include(l => l.EstadoPublicacion)
-                .Where(l => l.IdUsuario == idUsuario)
+                .Where(l => l.IdUsuario == idUsuario && l.EstadoPublicacion.Nombre != "Eliminado por usuario")
                 .OrderByDescending(c => c.FechaAgregado)
                 .Skip((pagina - 1) * RegistrosPorPagina)
                 .Take(RegistrosPorPagina)
@@ -185,6 +185,39 @@ namespace BookTrader.Controllers
             }
 
             return BadRequest();    
+        }
+
+
+        
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id != 0)
+            {
+                var libro = await _context.Libros.FindAsync(id);
+
+                if (libro != null)
+                {
+                    var estadoVendido = await _context.EstadoPublicacionEntity.FirstOrDefaultAsync(e => e.Nombre == "Eliminado por usuario");
+
+                    if (estadoVendido == null) return NotFound("Estado Vendido no encontrado en la base de datos");
+
+
+                    libro.EstadoPublicacionId = estadoVendido.Id;
+                    _context.Libros.Update(libro);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("MisLibros");
+                }
+
+                else
+                {
+                    return NotFound();
+                }
+
+            }
+
+            return BadRequest();
         }
 
     }
