@@ -13,7 +13,7 @@ html, body {
 
 .account-box {
     background-color: white;
-    padding: 50px;
+    padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
     width: 100%; /* Ocupa el 100% del contenedor */
@@ -22,6 +22,8 @@ html, body {
 }
 
 .account-container{
-    width : 45vw;
+    width : 127%;
+    height: 33rem; 
 }
+
 
