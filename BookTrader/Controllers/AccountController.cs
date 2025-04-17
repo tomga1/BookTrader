@@ -1,6 +1,7 @@
 ﻿using BookTrader.Data;
 using BookTrader.Models;
 using BookTrader.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -347,6 +348,70 @@ namespace BookTrader.Controllers
 
             return View("Error");
         }
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> EmailSender(int id)
+        {
+            
+
+            string compradorId = _userManager.GetUserId(User);
+
+            if (compradorId == null)
+                return Unauthorized();
+
+            var comprador = await _context.Users
+                .Include(u => u.Localidad)
+                    .ThenInclude(loc => loc.Provincia)
+                        .ThenInclude(prov => prov.Pais)
+                .SingleOrDefaultAsync(u => u.Id == compradorId); 
+            
+            if (comprador == null)
+            {
+                return Unauthorized();
+            }
+
+            // Obtener el libro con el ID
+            var libro = await _context.Libros
+                .Include(l => l.Publicador)
+                .FirstOrDefaultAsync(l => l.Id == id);
+
+            if (libro == null)
+                return NotFound();
+
+
+
+            var vendedor = libro.Publicador;
+            if (vendedor == null)
+            {
+                return NotFound("El libro no tiene un vendedor asignado");
+            }
+
+
+            var cuerpo = $@"
+                            Hola {vendedor.UserName}
+                            El usuario <strong>{comprador.NombreCompleto}</strong> está interesado en tu libro <em>{libro.Nombre}</em>.<br><br>
+                            <strong>Datos del comprador:</strong><br>
+                            Usuario: {comprador.NombreCompleto}<br>
+                            Telefono: {comprador.PhoneNumber}
+                            Email: {comprador.Email}<br>
+                            País: {comprador.Localidad.Provincia.Pais.Nombre}<br>
+                            Provincia: {comprador.Localidad.Provincia.Nombre}<br>
+                            Localidad: {comprador.Localidad?.Nombre}<br><br>
+                            Podés contactarlo para coordinar la entrega.<br><br>
+                            ¡Gracias por usar BookTrader!
+                            <strong>Importante:</strong><br>
+                            Recordá coordinar el encuentro en lugares públicos y seguros. 
+                            BookTrader es solo una plataforma de contacto entre usuarios y no se responsabiliza por posibles estafas o inconvenientes durante la transacción. ¡Sé precavido!
+                            ";
+
+            await _emailSender.SendEmailAsync(vendedor.Email, "¡Tienen interés en tu libro!", cuerpo);
+
+            TempData["Mensaje"] = "¡El correo fue enviado correctamente al vendedor!";
+            return RedirectToAction("Index", "Home");
+        }
+
 
     }
 }

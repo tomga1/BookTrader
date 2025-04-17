@@ -1,6 +1,8 @@
 ﻿@model BookTrader.Models.HomeViewModel
 @{
     ViewData["Title"] = "Home Page";
+    bool puedeEnviar = User.Identity.IsAuthenticated || User.IsInRole("Admin");
+
 }
 
 <div class="text-center">
@@ -82,8 +84,9 @@
                             </ul>
                             <div class="card-body">
                                 <a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalLibro_@libro.Id">Más Info</a>
-                                <a href="#" class="btn btn-success ">Lo quiero!</a>
-
+                                <a href="#" class="btn btn-success" onclick="EnviarMailAlVendedor(@libro.Id, '@puedeEnviar') ; return false;">
+                                    Lo quiero!
+                                </a>
                             </div>
                         </div>
                     </div>

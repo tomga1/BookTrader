@@ -35,6 +35,31 @@ function confirmarVenta(id) {
 }
 
 
+
+function EnviarMailAlVendedor(id, puedeEnviar) {
+
+    if (String(puedeEnviar).toLowerCase() !== 'true') {
+        window.location.href = '/Account/Login';
+        return;
+    }
+
+    Swal.fire({
+        title: '¿Enviar correo al vendedor?',
+        text: "Podrás comunicarte para coordinar la entrega",
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#198754',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, enviar!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/Account/EmailSender/' + id;
+        }
+    });
+}
+
+
 function validarImagen(tipo) {
     let urlInput = document.getElementById("imagenUrl");
     let fileInput = document.getElementById("imagenArchivo");
