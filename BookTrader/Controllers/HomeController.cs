@@ -102,5 +102,42 @@ namespace BookTrader.Controllers
         }
 
 
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult FiltrarLibrosPorCategorias([FromBody] List<int> subcategoriasIds)
+        {
+            IQueryable<Libros> query = _context.Libros
+                .Include(l => l.Categoria)
+                .Include(l => l.SubCategorias)
+                .Include(l => l.Condicion)
+                .Include(l => l.Publicador)
+                    .ThenInclude(p => p.Localidad)
+                        .ThenInclude(l => l.Provincia)
+                            .ThenInclude(p => p.Pais);
+
+
+            if (subcategoriasIds != null && subcategoriasIds.Any())
+            {
+                query = query.Where(l => subcategoriasIds.Contains(l.SubCategoriasId));
+            }
+
+            var librosFiltrados = query.ToList();
+
+            var modeloPaginado = new PaginacionViewModel<Libros>
+            {
+                Items = librosFiltrados,
+                PaginaActual = 1,
+                TotalPaginas = 1 // o lo calculás si hacés paginación en el filtro también
+            };
+
+            var viewModel = new HomeViewModel
+            {
+                LibrosPaginados = modeloPaginado
+            };
+
+            return PartialView("_LibrosFiltradosPartial", viewModel);
+
+
+        }
     }
 }

@@ -1,0 +1,63 @@
+﻿@model BookTrader.Models.HomeViewModel
+@{
+    ViewData["Title"] = "Home Page";
+    bool puedeEnviar = User.Identity.IsAuthenticated || User.IsInRole("Admin");
+
+}
+
+@foreach (var libro in Model.LibrosPaginados.Items)
+{
+    <div class="col-md-auto mb-3">
+        <div class="card" style="width: 18rem;">
+            <img src="@libro.ImagenUrl" class="card-img-top img-fija" alt="@libro.Nombre">
+            <div class="card-body">
+                <h5 class="card-title">@libro.Nombre</h5>
+                <p class="card-text">@libro.Autor</p>
+                <p class="card-text"><strong>Editorial:</strong> @libro.Editorial</p>
+                <p class="card-text fw-bold"><strong>Precio:</strong> $@libro.Precio</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Categoría:</strong> @libro.Categoria?.Nombre</li>
+                <li class="list-group-item"><strong>Sub-Categoria:</strong> @libro.SubCategorias?.Nombre</li>
+                <li class="list-group-item"><strong>Estado:</strong> @libro.Condicion?.Nombre</li>
+                <li class="list-group-item"><strong>Publicado por:</strong> @libro.Publicador?.NombreCompleto</li>
+                <li class="list-group-item">
+                    <strong>Ubicación:</strong> @libro.Publicador?.Localidad?.Nombre,
+                    @libro.Publicador?.Localidad?.Provincia?.Nombre,
+                    @libro.Publicador?.Localidad?.Provincia?.Pais?.Nombre
+                </li>
+            </ul>
+            <div class="card-body">
+                <a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalLibro_@libro.Id">Más Info</a>
+                <a href="#" class="btn btn-success" onclick="EnviarMailAlVendedor(@libro.Id, '@puedeEnviar') ; return false;">
+                    Lo quiero!
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal fade" id="modalLibro_@libro.Id" tabindex="-1" aria-labelledby="modalLabel_@libro.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel_@libro.Id">@libro.Nombre </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Autor:</strong> @libro.Autor</p>
+                    <p><strong>Editorial:</strong> @libro.Editorial</p>
+                    <p><strong>ISBN:</strong> @libro.ISBN</p>
+                    <p><strong>Idioma:</strong> @libro.Idioma?.Nombre</p>
+                    <p><strong>Páginas:</strong> @libro.cantPaginas</p>
+                    <p><strong>Estado del libro:</strong> @libro.Condicion?.Nombre</p>
+                    <p><strong>Descripción:</strong><br /> @libro.Descripcion</p>
+                    <p><strong>Reseña:</strong><br /> @libro.MasInfo</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>  
+        </div>
+    </div>
+}

@@ -9,6 +9,10 @@
     <h1 class="display-4">BookTrader</h1>
 </div>
 
+<form id="formFiltroLibros">
+    @Html.AntiForgeryToken()
+</form>
+
 
 <div class="container-fluid mb-5">
     <div class="row">
@@ -58,7 +62,7 @@
 
 
         <div class="col-10">
-            <div class="row">
+            <div class="row" id="contenedor-libros">
 
                 @foreach (var libro in Model.LibrosPaginados.Items)
                 {
@@ -157,3 +161,26 @@
 
 
 </div>
+
+<script>
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            const idsSeleccionados = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(cb => parseInt(cb.value));
+
+            fetch('/Home/FiltrarLibrosPorCategorias', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify(idsSeleccionados)
+            })
+                .then(response => response.text())
+                .then(html => {
+                    document.querySelector('#contenedor-libros').innerHTML = html;
+                })
+                .catch(error => console.error('Error al filtrar libros:', error));
+        });
+    });
+</script>
