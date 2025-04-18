@@ -21,9 +21,13 @@ html, body {
     text-align: center; 
 }
 
-.account-container{
-    width : 127%;
-    height: 33rem; 
+.account-container {
+    width: 25rem;
+    height: 33rem;
+    min-height: 100vh; /* Asegura que cubra toda la altura de la pantalla */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 

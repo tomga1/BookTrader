@@ -17,7 +17,7 @@
 <div class="container-fluid mb-5">
     <div class="row">
 
-        <aside class="col-md-2 bg-light p-3 border-end d-none d-md-block" style="min-height: 100vh;">
+        <aside class="col-md-2 bg-light p-3 border-end d-none d-md-block" style="aside-body">
             <div class="accordion" id="filtrosCategorias">
                 <h3>Categorías</h3>
                 @foreach (var categoria in Model.Categorias)
@@ -34,7 +34,7 @@
                         <div id="collapseCategoria_@categoria.Id"
                              class="accordion-collapse collapse"
                              data-bs-parent="#filtrosCategorias">
-                            <div class="accordion-body">
+                            <div class="accordion-body" style="acordionbody">
                                 @if (categoria.SubCategorias != null && categoria.SubCategorias.Any())
                                 {
                                     <ul class="list-group">
