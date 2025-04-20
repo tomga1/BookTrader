@@ -82,6 +82,7 @@ body {
 
 .card-body {
     flex-grow: 1;
+    margin-left: -15px;
 }
 
 

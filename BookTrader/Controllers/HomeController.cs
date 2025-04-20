@@ -28,6 +28,7 @@ namespace BookTrader.Controllers
                 .Include(l => l.Categoria)  // Incluye la información de la categoría
                 .Include(l => l.Idioma)
                 .Include(l => l.Condicion)
+                .Include(l => l.Formato)
                 .Include(l => l.EstadoPublicacion)
                 .Include(l => l.Publicador)
                     .ThenInclude(u => u.Localidad)

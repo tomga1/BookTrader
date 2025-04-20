@@ -74,17 +74,19 @@
                                 <p class="card-text">@libro.Autor</p>
                                 <p class="card-text"><strong>Editorial:</strong> @libro.Editorial</p>
                                 <p class="card-text fw-bold"><strong>Precio:</strong> $@libro.Precio</p>
+                                <li class="list-group-item fw-bold"><strong>Estado:</strong> @libro.Condicion?.Nombre</li>
+                                <li class="list-group-item fw-bold"><strong>Formato:</strong> @libro.Formato?.Nombre</li>
                             </div>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><strong>Categoría:</strong> @libro.Categoria?.Nombre</li>
                                 <li class="list-group-item"><strong>Sub-Categoria:</strong> @libro.SubCategorias?.Nombre</li>
-                                <li class="list-group-item"><strong>Estado:</strong> @libro.Condicion?.Nombre</li>
-                                <li class="list-group-item"><strong>Publicado por:</strong> @libro.Publicador?.NombreCompleto</li>
                                 <li class="list-group-item">
                                     <strong>Ubicación:</strong> @libro.Publicador?.Localidad?.Nombre,
                                     @libro.Publicador?.Localidad?.Provincia?.Nombre,
                                     @libro.Publicador?.Localidad?.Provincia?.Pais?.Nombre
                                 </li>
+                                <p><strong>Idioma:</strong> @libro.Idioma?.Nombre</p>
+
                             </ul>
                             <div class="card-body">
                                 <a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalLibro_@libro.Id">Más Info</a>
@@ -107,11 +109,12 @@
                                     <p><strong>Autor:</strong> @libro.Autor</p>
                                     <p><strong>Editorial:</strong> @libro.Editorial</p>
                                     <p><strong>ISBN:</strong> @libro.ISBN</p>
-                                    <p><strong>Idioma:</strong> @libro.Idioma?.Nombre</p>
                                     <p><strong>Páginas:</strong> @libro.cantPaginas</p>
                                     <p><strong>Estado del libro:</strong> @libro.Condicion?.Nombre</p>
                                     <p><strong>Descripción:</strong><br /> @libro.Descripcion</p>
                                     <p><strong>Reseña:</strong><br /> @libro.MasInfo</p>
+                                    <li class="list-group-item"><strong>Publicado por:</strong> @libro.Publicador?.NombreCompleto</li>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
