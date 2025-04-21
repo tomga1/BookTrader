@@ -4,3 +4,73 @@
 }
 
 <h1>Mi pefil</h1>
+
+
+
+<div class="mb-6 mt-5" style="margin-bottom:100px">
+    <form id="formMiProfile" method="post" enctype="multipart/form-data" action="@Url.Action("MiProfile", "Account")">
+        <div class="row">
+
+            <!-- Columna izquierda -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="PhoneNumber" class="form-label">Telefono</label>
+                    <input type="tel" class="form-control" id="PhoneNumber" name="PhoneNumber" required>
+                </div>
+
+            </div>
+
+            <!-- Columna derecha -->
+            @* <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoría</label>
+                    <select class="form-select" id="categoria" name="CategoriaId" onchange="cargarSubcategorias(this.value)">
+                        @await Component.InvokeAsync("Categorias", new { dropdown = false })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="subcategoria" class="form-label">Sub-Categoría</label>
+                    <select class="form-select" id="subcategoria" name="SubCategoriasId">
+                        <option value="">Selecciona una Sub-Categoría</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="condicion" class="form-label">Condición</label>
+                    <select class="form-select" id="condicion" name="CondicionId">
+                        @await Component.InvokeAsync("Condiciones", new { dropdown = false })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="formato" class="form-label">Formato</label>
+                    <select class="form-select" id="formato" name="FormatoId">
+                        @await Component.InvokeAsync("Formato", new { dropdown = false })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="idioma" class="form-label">Idioma</label>
+                    <select class="form-select" id="idioma" name="IdiomaId">
+                        @await Component.InvokeAsync("Idiomas", new { dropdown = false })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="masInfo" class="form-label">Reseña</label>
+                    <textarea class="form-control" id="masInfo" name="masInfo" rows="3"></textarea>
+                </div>
+
+                  <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                </div> 
+            </div> *@
+        </div>
+
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+    </form>
+</div>
