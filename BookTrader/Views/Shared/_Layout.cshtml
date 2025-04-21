@@ -45,7 +45,7 @@
                                 </ul>
                             </li>
                         }
-                       
+
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
@@ -53,10 +53,13 @@
                             </li>
 
                             <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="@Url.Action("MiProfile", "Account")">Mi perfil</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="@Url.Action("MisLibros", "Libros")">Mis libros</a>
                             </li>
                         }
-                         
+
 
                     </ul>
 
@@ -69,7 +72,7 @@
             </div>
         </nav>
 
-        
+
 
     </header>
 
@@ -77,7 +80,7 @@
         <i class="fas fa-filter"></i> Filtros
     </button>
 
-    
+
 
 
     <div class="container">
@@ -88,7 +91,7 @@
         </div>
     </div>
 
-    
+
     <footer class="footer text-muted py-3">
         <div class="container text-center">
             <p class="footer-text mb-0">&copy; 2025 - BookTrader - Buenos Aires, Argentina. <br>Una plataforma para comprar y vender libros. <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></p>

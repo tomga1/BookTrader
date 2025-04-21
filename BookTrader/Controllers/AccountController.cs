@@ -413,5 +413,11 @@ namespace BookTrader.Controllers
         }
 
 
+
+        [HttpGet]
+        public async Task<IActionResult> MiProfile()
+        {
+            return View();  
+        }
     }
 }
