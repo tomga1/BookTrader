@@ -414,9 +414,20 @@ namespace BookTrader.Controllers
 
 
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> MiProfile()
         {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                string? idUsuario = user?.Id;
+
+                var usuario = _context.Users{
+
+                }
+            }
+
             return View();  
         }
     }
