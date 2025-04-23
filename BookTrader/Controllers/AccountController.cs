@@ -407,7 +407,7 @@ namespace BookTrader.Controllers
                             El usuario <strong>{comprador.NombreCompleto}</strong> está interesado en tu libro <em>{libro.Nombre}</em>.<br><br>
                             <strong>Datos del comprador:</strong><br>
                             Usuario: {comprador.NombreCompleto}<br>
-                            Telefono: {comprador.PhoneNumber}
+                            Telefono: {comprador.PhoneNumber}<br>
                             Email: {comprador.Email}<br>
                             País: {comprador.Localidad.Provincia.Pais.Nombre}<br>
                             Provincia: {comprador.Localidad.Provincia.Nombre}<br>

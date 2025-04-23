@@ -42,7 +42,9 @@
                                         {
                                             <li class="list-group-item">
                                                 <input type="checkbox" id="subcategoria_@sub.Id" value="@sub.Id" />
-                                                <label for="subcategoria_@sub.Id"> @sub.Nombre </label>
+                                                <label for="subcategoria_@sub.Id">
+                                                    @(sub.Nombre.Length >24 ? sub.Nombre.Substring(0,24) + "..." : sub.Nombre)
+                                                    </label>
                                             </li>
                                         }
                                     </ul>
@@ -70,9 +72,17 @@
                         <div class="card" style="width: 18rem;">
                             <img src="@libro.ImagenUrl" class="card-img-top img-fija" alt="@libro.Nombre">
                             <div class="card-body">
-                                <h5 class="card-title">@libro.Nombre</h5>
-                                <p class="card-text">@libro.Autor</p>
-                                <p class="card-text"><strong>Editorial:</strong> @libro.Editorial</p>
+                                <h5 class="card-title" title="@libro.Nombre">
+                                    @(libro.Nombre.Length > 24 ? libro.Nombre.Substring(0, 24) + "..." : libro.Nombre)
+                                </h5>
+                                <p class="card-text" title="@libro.Autor">
+                                    @(libro.Autor.Length > 24 ? libro.Autor.Substring(0, 24) + "..." : libro.Autor)
+                                </p>
+
+                                <p class="card-text" title="@libro.Editorial">
+                                    <strong>Editorial:</strong>
+                                    @(libro.Editorial.Length > 24 ? libro.Editorial.Substring(0, 24) + "..." : libro.Editorial)
+                                </p>
                                 <p class="card-text fw-bold"><strong>Precio:</strong> $@libro.Precio</p>
                                 <li class="list-group-item fw-bold"><strong>Estado:</strong> @libro.Condicion?.Nombre</li>
                                 <li class="list-group-item fw-bold"><strong>Formato:</strong> @libro.Formato?.Nombre</li>
