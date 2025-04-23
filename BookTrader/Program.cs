@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BookTrader.Models;
 using BookTrader.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 
 
 
@@ -37,6 +38,16 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";  // Redirige si no está autenticado
     options.AccessDeniedPath = "/Account/AccessDenied"; // Redirige si no tiene permisos
+
+    // Políticas de seguridad
+    options.Cookie.HttpOnly = true;                        
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;    
+    options.Cookie.SameSite = SameSiteMode.None;            
+
+    // -------------------------
+    // Expiración y renovación
+    options.ExpireTimeSpan = TimeSpan.FromDays(14);        
+    options.SlidingExpiration = true;
 });
 
 
@@ -56,7 +67,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedProto
+});
+
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();

@@ -6,5 +6,7 @@ namespace BookTrader.Models
     {
         public string? NombreCompleto { get; set; }
         public Localidades? Localidad  { get; set; }
+        public bool IsFirstLogin { get; set; } = true;
+
     }
 }

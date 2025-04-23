@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -62,6 +63,13 @@ namespace BookTrader.Controllers
 
                     if (result.Succeeded)
                     {
+                        if (user.IsFirstLogin)
+                        {
+                            user.IsFirstLogin = false;
+                            await _userManager.UpdateAsync(user);
+                            return RedirectToAction("MiProfile", "Account");
+                        }
+
                         return RedirectToAction("Index", "Home");
                     }
                     else
@@ -69,7 +77,12 @@ namespace BookTrader.Controllers
                         ModelState.AddModelError("", "El email o la contraseña son incorrectos.");
                         return View(model);
                     }
+
+
                 }
+                    
+
+
 
                 return View(model);
             }
@@ -354,7 +367,7 @@ namespace BookTrader.Controllers
         [Authorize]
         public async Task<IActionResult> EmailSender(int id)
         {
-            
+
 
             string compradorId = _userManager.GetUserId(User);
 
@@ -365,8 +378,8 @@ namespace BookTrader.Controllers
                 .Include(u => u.Localidad)
                     .ThenInclude(loc => loc.Provincia)
                         .ThenInclude(prov => prov.Pais)
-                .SingleOrDefaultAsync(u => u.Id == compradorId); 
-            
+                .SingleOrDefaultAsync(u => u.Id == compradorId);
+
             if (comprador == null)
             {
                 return Unauthorized();
@@ -413,22 +426,54 @@ namespace BookTrader.Controllers
         }
 
 
-
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> MiProfile()
         {
-            if (ModelState.IsValid)
+            var user = await _userManager.GetUserAsync(User);
+            if(user == null)
             {
-                var user = await _userManager.GetUserAsync(User);
-
-                string? idUsuario = user?.Id;
-
-                var usuario = _context.Users{
-
-                }
+                return NotFound("No se encontro el usuario"); 
             }
 
-            return View();  
+            var model = new MiProfileViewModel
+            {
+                PhoneNumber = user.PhoneNumber,
+            };
+
+            return View(model); 
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MiProfile(MiProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound("Usuario no encontrado");
+            }
+
+            var result = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, "Error al actualizar el telefono");
+                return View(model); 
+            }
+            
+            await _signInManager.RefreshSignInAsync(user);
+            ViewBag.StatusMessage = "Telefono actualizado correctamente.";
+
+
+
+            return RedirectToAction("Index", "Home"); 
+
         }
     }
 }
