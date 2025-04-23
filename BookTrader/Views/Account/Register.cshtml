@@ -13,28 +13,28 @@
         <form asp-action="Register" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="mb-3">
-                <label asp-for="UserName" class="form-label"></label>
+                <label asp-for="UserName" class="form-label" style="margin-bottom: 0rem;"></label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Email" class="form-label"></label>
+                <label asp-for="Email" class="form-label" style="margin-bottom: 0rem;"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Password" class="form-label"></label>
+                <label asp-for="Password" class="form-label" style="margin-bottom: 0rem;"></label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <label asp-for="ConfirmPassword" class="form-label" style="margin-bottom: 0rem;"></label>
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="PaisId" class="form-label">País</label>
+                <label asp-for="PaisId" class="form-label" style="margin-bottom: 0rem;">País</label>
                 <select asp-for="PaisId" class="form-select" asp-items="Model.Paises" id="pais-select">
                     <option value="">-- Selecciona un país --</option>
                 </select>
@@ -42,7 +42,7 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="ProvinciaId" class="form-label">Provincia</label>
+                <label asp-for="ProvinciaId" class="form-label" style="margin-bottom: 0rem;">Provincia</label>
                 <select asp-for="ProvinciaId" class="form-select" asp-items="Model.Provincias" id="provincia-select">
                     <option value="">-- Selecciona una provincia --</option>
                 </select>
@@ -50,7 +50,7 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="LocalidadId" class="form-label">Localidad</label>
+                <label asp-for="LocalidadId" class="form-label" style="margin-bottom: 0rem;">Localidad</label>
                 <select asp-for="LocalidadId" class="form-select" asp-items="Model.Localidades" id="localidad-select">
                     <option value="">-- Selecciona una localidad --</option>
                 </select>
