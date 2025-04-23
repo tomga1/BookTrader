@@ -15,16 +15,18 @@
                 <p class="card-text">@libro.Autor</p>
                 <p class="card-text"><strong>Editorial:</strong> @libro.Editorial</p>
                 <p class="card-text fw-bold"><strong>Precio:</strong> $@libro.Precio</p>
+                <li class="list-group-item fw-bold"><strong>Estado:</strong> @libro.Condicion?.Nombre</li>
+                <li class="list-group-item fw-bold"><strong>Formato:</strong> @libro.Formato?.Nombre</li>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item"><strong>Categoría:</strong> @libro.Categoria?.Nombre</li>
                 <li class="list-group-item"><strong>Sub-Categoria:</strong> @libro.SubCategorias?.Nombre</li>
-                <li class="list-group-item"><strong>Estado:</strong> @libro.Condicion?.Nombre</li>
-                <li class="list-group-item"><strong>Publicado por:</strong> @libro.Publicador?.NombreCompleto</li>
                 <li class="list-group-item">
                     <strong>Ubicación:</strong> @libro.Publicador?.Localidad?.Nombre,
                     @libro.Publicador?.Localidad?.Provincia?.Nombre,
                     @libro.Publicador?.Localidad?.Provincia?.Pais?.Nombre
+                    <p><strong>Idioma:</strong> @libro.Idioma?.Nombre</p>
+
                 </li>
             </ul>
             <div class="card-body">
