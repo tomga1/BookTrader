@@ -220,5 +220,58 @@ namespace BookTrader.Controllers
             return BadRequest();
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var libro = await _context.Libros.FindAsync(id);
+
+            if (libro == null)
+            {
+                return NotFound();
+            }
+
+            return View(libro);
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Libros model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var libroExistente = await _context.Libros.FindAsync(model.Id);
+            if (libroExistente == null)
+            {
+                return NotFound();
+            }
+
+            // Actualizar campos
+            libroExistente.Nombre = model.Nombre;
+            libroExistente.Autor = model.Autor;
+            libroExistente.Editorial = model.Editorial;
+            libroExistente.ISBN = model.ISBN;
+            libroExistente.cantPaginas = model.cantPaginas;
+            libroExistente.Precio = model.Precio;
+            libroExistente.CategoriaId = model.CategoriaId;
+            libroExistente.SubCategoriasId = model.SubCategoriasId;
+            libroExistente.CondicionId = model.CondicionId;
+            libroExistente.FormatoId = model.FormatoId;
+            libroExistente.IdiomaId = model.IdiomaId;
+            libroExistente.MasInfo = model.MasInfo;
+
+            // Aquí podrías actualizar también la imagen si subió una nueva.
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index"); // O a donde quieras ir después de editar
+        }
+
+
     }
 }

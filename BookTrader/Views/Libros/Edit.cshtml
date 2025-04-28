@@ -1,0 +1,128 @@
+﻿@model Libros
+
+
+@{
+    ViewData["Title"] = "Libros";
+
+}
+
+
+
+<div class="mb-6 mt-5" style="margin-bottom:100px">
+    <form id="formEditarLibro" method="post" enctype="multipart/form-data" action="@Url.Action("Edit", "Libros")">
+        @* Campo oculto para el ID *@
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row">
+            <!-- Columna izquierda -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre del Libro</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" value="@Model.Nombre" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="autor" class="form-label">Autor</label>
+                    <input type="text" class="form-control" id="autor" name="autor" value="@Model.Autor" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editorial" class="form-label">Editorial</label>
+                    <input type="text" class="form-control" id="editorial" name="editorial" value="@Model.Editorial" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="isbn" class="form-label">ISBN</label>
+                    <input type="text" class="form-control" id="isbn" name="isbn" value="@Model.ISBN">
+                </div>
+
+           @*      <div class="mb-3">
+                    <label for="cantPaginas" class="form-label">Cantidad de páginas</label>
+                    <input type="number" class="form-control" id="cantPaginas" name="cantPaginas" min="1" value="@Model.CantPaginas" required>
+                </div>
+ *@
+                <div class="mb-3">
+                    <label for="precio" class="form-label">Precio</label>
+                    <input type="number" class="form-control" id="precio" name="precio" step="0.01" value="@Model.Precio" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="imagenArchivo" class="form-label">Cambiar Imagen (opcional)</label>
+                    <input type="file" class="form-control" id="imagenArchivo" name="imagenArchivo" accept="image/*" onchange="validarImagen('archivo')">
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ImagenUrl))
+                {
+                    <div class="mb-3">
+                        <label>Imagen actual:</label><br />
+                        <img id="previewImg" src="@Model.ImagenUrl" class="img-fluid" style="max-width: 200px;">
+                    </div>
+                }
+            </div>
+
+            <!-- Columna derecha -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoría</label>
+                    <select class="form-select" id="categoria" name="CategoriaId" onchange="cargarSubcategorias(this.value)">
+                        @await Component.InvokeAsync("Categorias", new { dropdown = false, selectedId = Model.CategoriaId })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="subcategoria" class="form-label">Sub-Categoría</label>
+                    <select class="form-select" id="subcategoria" name="SubCategoriasId">
+                        @await Component.InvokeAsync("SubCategorias", new { categoriaId = Model.CategoriaId, selectedId = Model.SubCategoriasId })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="condicion" class="form-label">Condición</label>
+                    <select class="form-select" id="condicion" name="CondicionId">
+                        @await Component.InvokeAsync("Condiciones", new { dropdown = false, selectedId = Model.CondicionId })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="formato" class="form-label">Formato</label>
+                    <select class="form-select" id="formato" name="FormatoId">
+                        @await Component.InvokeAsync("Formato", new { dropdown = false, selectedId = Model.FormatoId })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="idioma" class="form-label">Idioma</label>
+                    <select class="form-select" id="idioma" name="IdiomaId">
+                        @await Component.InvokeAsync("Idiomas", new { dropdown = false, selectedId = Model.IdiomaId })
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="masInfo" class="form-label">Reseña</label>
+                    <textarea class="form-control" id="masInfo" name="masInfo" rows="3">@Model.MasInfo</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function cargarSubcategorias(categoriaId) {
+        $.ajax({
+            url: '/SubCategorias/Lista',
+            data: { categoriaId: categoriaId },
+            type: 'GET',
+            success: function (data) {
+                $('#subcategoria').html(data);
+            },
+            error: function () {
+                alert('Ocurrió un error al cargar las subcategorías.');
+            }
+        });
+    }
+</script>
