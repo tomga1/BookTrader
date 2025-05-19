@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
 
 namespace BookTrader.Controllers
 {
@@ -240,6 +241,10 @@ namespace BookTrader.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Libros model)
         {
+            ModelState.Remove("Publicador");
+            ModelState.Remove("PublicadorId"); 
+            
+
             if (!ModelState.IsValid)
             {
                 return View(model);

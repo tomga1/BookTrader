@@ -9,7 +9,9 @@
 
 
 <div class="mb-6 mt-5" style="margin-bottom:100px">
+    
     <form id="formEditarLibro" method="post" enctype="multipart/form-data" action="@Url.Action("Edit", "Libros")">
+        @Html.AntiForgeryToken()
         @* Campo oculto para el ID *@
         <input type="hidden" asp-for="Id" />
 
@@ -101,6 +103,8 @@
                     <label for="masInfo" class="form-label">Reseña</label>
                     <textarea class="form-control" id="masInfo" name="masInfo" rows="3">@Model.MasInfo</textarea>
                 </div>
+
+                
             </div>
         </div>
 
