@@ -81,14 +81,18 @@
 
                 <div class="mb-3">
                     <label for="condicion" class="form-label">Condición</label>
-                    <select class="form-select" id="condicion" name="CondicionId" required>
-                        @await Component.InvokeAsync("Condiciones", new { dropdown = false, selectedId = Model.CondicionId })
+                    <p>CONDICION SELECCIONADA :   @Model.CondicionId</p>
+                    <select class="form-select" id="condicion" name="CondicionId">
+                        @await Component.InvokeAsync(
+                                 "Condiciones",
+                                 new { dropdown = false, selectedId = Model.CondicionId }
+                                 )
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="formato" class="form-label">Formato</label>
-                    <select class="form-select" id="formato" name="FormatoId" required>
+                    <select class="form-select" id="formato" name="FormatoId">
                         @await Component.InvokeAsync("Formato", new { dropdown = false, selectedId = Model.FormatoId })
                     </select>
                 </div>
