@@ -1,8 +1,12 @@
 ﻿@model IEnumerable<BookTrader.Models.Categorias>
 
-
 @{
     var esDropdown = ViewData["Dropdown"] as bool? ?? false;
+    int selectedId = 0;
+    if (ViewData["selectedId"] != null)
+    {
+        selectedId = Convert.ToInt32(ViewData["selectedId"]);
+    }
 }
 
 @if (esDropdown)
@@ -20,22 +24,17 @@
 }
 else
 {
-    @foreach (var categoria in Model)
+@foreach (var categoria in Model)
+{
+    if (categoria.Id == selectedId)
+    {
+        <option value="@categoria.Id" selected="selected">@categoria.Nombre</option>
+    }
+    else
     {
         <option value="@categoria.Id">@categoria.Nombre</option>
     }
 }
 
-@* <ul class="dropdown-menu">
-    @foreach (var categoria in Model)
-    {
-        <li>
-            <a class="dropdown-item" href="#" onclick="filtrarCategoria('@categoria.Id')">
-                @categoria.Nombre
-            </a>
-        </li>
-    }
-</ul>
 
-
- *@
+}

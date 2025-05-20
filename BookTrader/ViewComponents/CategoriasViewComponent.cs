@@ -16,14 +16,18 @@ namespace BookTrader.ViewComponents
             _context = context;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(bool dropdown = false)
+        public async Task<IViewComponentResult> InvokeAsync(bool dropdown = false, int? selectedId = null)
         {
             var categorias = await _context.Categorias
                 .OrderBy(c => c.Nombre)
                 .ToListAsync();
+
             ViewData["Dropdown"] = dropdown;
+            ViewData["selectedId"] = selectedId;
+
             return View(categorias);
         }
+
 
     }
 }

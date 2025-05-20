@@ -274,7 +274,7 @@ namespace BookTrader.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index"); // O a donde quieras ir después de editar
+            return RedirectToAction("MisLibros"); // O a donde quieras ir después de editar
         }
 
 
