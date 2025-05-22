@@ -19,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddTransient<EmailSender>();
 
+builder.Services.AddHttpClient<GoogleBookService>();
 
 builder.Services.AddIdentity<Users, IdentityRole>(options =>
 {

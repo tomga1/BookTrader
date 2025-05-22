@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
+using BookTrader.Services;
 
 namespace BookTrader.Controllers
 {
@@ -18,15 +19,17 @@ namespace BookTrader.Controllers
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<Users> _userManager;
+        private readonly GoogleBookService _googleBookService;
 
 
 
-        public LibrosController(ApplicationDbContext context, IMapper mapper, IWebHostEnvironment webHostEnvironment, UserManager<Users> userManager)
+        public LibrosController(ApplicationDbContext context, IMapper mapper, IWebHostEnvironment webHostEnvironment, UserManager<Users> userManager, GoogleBookService googleBookService)
         {
             _context = context; 
             _mapper = mapper;   
             _webHostEnvironment = webHostEnvironment;
-            _userManager = userManager;       
+            _userManager = userManager;  
+            _googleBookService = googleBookService;
         }
 
         [Authorize]
@@ -279,6 +282,17 @@ namespace BookTrader.Controllers
             return RedirectToAction("MisLibros"); // O a donde quieras ir después de editar
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> BuscarPorISBN(string isbn)
+        {
+            var libro = await _googleBookService.BuscarLibroPorISBN(isbn);
+            if (libro == null)
+            {
+                return NotFound();
+            }
+            return Json(libro);
+        }
 
     }
 }

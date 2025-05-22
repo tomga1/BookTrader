@@ -13,6 +13,10 @@
             <!-- Columna izquierda -->
             <div class="col-md-6">
                 <div class="mb-3">
+                    <label for="isbn" class="form-label">ISBN</label>
+                    <input type="text" class="form-control" id="isbn" name="isbn">
+                </div>
+                <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre del Libro</label>
                     <input type="text" class="form-control" id="nombre" name="nombre" required>
                 </div>
@@ -27,10 +31,6 @@
                     <input type="text" class="form-control" id="editorial" name="editorial" required>
                 </div>
 
-                <div class="mb-3">
-                    <label for="isbn" class="form-label">ISBN</label>
-                    <input type="text" class="form-control" id="isbn" name="isbn">
-                </div>
 
                 <div class="mb-3">
                     <label for="cantPaginas" class="form-label">Cantidad de páginas</label>
@@ -125,4 +125,37 @@
             }
         });
     }
+
+    $(document).ready(function () {
+        $('#isbn').on('blur', function () { // o 'change' si preferís
+            var isbn = $(this).val().trim();
+            if (isbn !== '') {
+                $.ajax({
+                    url: '@Url.Action("BuscarPorISBN", "Libros")',
+                    type: 'GET',
+                    data: { isbn: isbn },
+                    success: function (data) {
+
+                        if (data) {
+                            console.log(data); 
+                            $('#nombre').val(data.nombre || '').addClass('is-valid');
+                            $('#autor').val(data.autor || '').addClass('is-valid');
+                            $('#editorial').val(data.editorial || '').addClass('is-valid');
+                            $('#cantPaginas').val(data.cantPaginas || '').addClass('is-valid');
+                            $('#masInfo').val(data.descripcion || '').addClass('is-valid');
+
+                            // Si querés previsualizar una imagen de la API
+                            if (data.imagenUrl) {
+                                $('#previewImg').attr('src', data.imagenUrl).show();
+                            }
+                        }
+                    },
+                    error: function () {
+                        console.log('No se encontró información con ese ISBN.');
+                    }
+                });
+            }
+        });
+    });
 </script>
+
