@@ -3,6 +3,11 @@
 
 @{
     var esDropdown = ViewData["Dropdown"] as bool? ?? false;
+    int selectedId = 0;
+    if (ViewData["selectedId"] != null)
+    {
+        selectedId = Convert.ToInt32(ViewData["selectedId"]);
+    }
 }
 
 @if (esDropdown)
@@ -20,23 +25,15 @@
 }
 else
 {
-    <option selected>Seleccione un formato</option>
     @foreach (var formato in Model)
     {
-        <option value="@formato.Id">@formato.Nombre</option>
+        if (formato.Id == selectedId)
+        {
+            <option value="@formato.Id" selected="selected">@formato.Nombre</option>
+        }
+        else
+        {
+            <option value="@formato.Id">@formato.Nombre</option>
+        }
     }
 }
-
-@* <ul class="dropdown-menu">
-    @foreach (var categoria in Model)
-    {
-        <li>
-            <a class="dropdown-item" href="#" onclick="filtrarCategoria('@categoria.Id')">
-                @categoria.Nombre
-            </a>
-        </li>
-    }
-</ul>
-
-
- *@

@@ -3,6 +3,12 @@
 
 @{
     var esDropdown = ViewData["Dropdown"] as bool? ?? false;
+    int selectedId = 0;
+    if (ViewData["selectedId"] != null)
+    {
+        selectedId = Convert.ToInt32(ViewData["selectedId"]);
+    }
+
 }
 
 @if (esDropdown)
@@ -20,10 +26,16 @@
 }
 else
 {
-    <option selected>Seleccione un idioma</option>
     @foreach (var idioma in Model)
     {
-        <option value="@idioma.Id">@idioma.Nombre</option>
+        if (idioma.Id == selectedId)
+        {
+            <option value="@idioma.Id" selected="selected">@idioma.Nombre</option>
+        }
+        else
+        {
+            <option value="@idioma.Id">@idioma.Nombre</option>
+        }
     }
 }
 

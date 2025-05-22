@@ -45,7 +45,7 @@
  *@
                 <div class="mb-3">
                     <label for="precio" class="form-label">Precio</label>
-                    <input type="number" class="form-control" id="precio" name="precio" step="0.01" value="@Model.Precio" required>
+                    <input type="number" class="form-control" id="precio" name="precio" step="0.01" value="@Model.Precio.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
                 </div>
 
                 <div class="mb-3">
@@ -81,7 +81,6 @@
 
                 <div class="mb-3">
                     <label for="condicion" class="form-label">Condición</label>
-                    <p>CONDICION SELECCIONADA :   @Model.CondicionId</p>
                     <select class="form-select" id="condicion" name="CondicionId">
                         @await Component.InvokeAsync(
                                  "Condiciones",
@@ -101,7 +100,9 @@
                     <label for="idioma" class="form-label">Idioma</label>
                     <select class="form-select" id="idioma" name="IdiomaId" required>
                         @await Component.InvokeAsync("Idiomas", new { dropdown = false, selectedId = Model.IdiomaId })
+                        
                     </select>
+                
                 </div>
 
                 <div class="mb-3">

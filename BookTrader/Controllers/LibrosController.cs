@@ -227,6 +227,8 @@ namespace BookTrader.Controllers
         {
             var libro = await _context.Libros.FindAsync(id);
 
+            
+
             if (libro == null)
             {
                 return NotFound();
