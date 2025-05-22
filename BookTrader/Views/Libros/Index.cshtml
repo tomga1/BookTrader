@@ -142,11 +142,14 @@
                             $('#autor').val(data.autor || '').addClass('is-valid');
                             $('#editorial').val(data.editorial || '').addClass('is-valid');
                             $('#cantPaginas').val(data.cantPaginas || '').addClass('is-valid');
-                            $('#masInfo').val(data.descripcion || '').addClass('is-valid');
+                            $('#masInfo').val(data.masInfo || '').addClass('is-valid');
 
                             // Si querés previsualizar una imagen de la API
                             if (data.imagenUrl) {
                                 $('#previewImg').attr('src', data.imagenUrl).show();
+
+                                // Quitar el "required" del input de archivo si la imagen viene de la API
+                                $('#imagenArchivo').prop('required', false);
                             }
                         }
                     },
