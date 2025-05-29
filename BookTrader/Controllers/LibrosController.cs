@@ -9,6 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using BookTrader.Services;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Globalization;
+using BookTrader.Helpers;
+
 
 namespace BookTrader.Controllers
 {
@@ -77,6 +82,9 @@ namespace BookTrader.Controllers
                     var user = await _userManager.GetUserAsync(User);
 
                     string? idUsuario = user?.Id;
+
+                    insertLibroDTO.Nombre = TextHelper.NormalizarNombreLibro(insertLibroDTO.Nombre); 
+
 
                     var libro = _mapper.Map<Libros>(insertLibroDTO);
                     libro.IdUsuario = idUsuario;
@@ -293,6 +301,8 @@ namespace BookTrader.Controllers
             }
             return Json(libro);
         }
+
+        
 
     }
 }
