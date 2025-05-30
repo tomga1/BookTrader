@@ -43,9 +43,12 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="imagenArchivo" class="form-label">Subir Imagen</label>
-                    <input type="file" class="form-control" id="imagenArchivo" name="imagenArchivo" accept="image/*" required onchange="validarImagen('archivo')">
+                    <label for="ImagenArchivo" class="form-label">Subir Imagen</label>
+                    <input type="file" class="form-control" id="ImagenArchivo" name="ImagenArchivo" accept="image/*" onchange="validarImagen('archivo')">
                 </div>
+
+                <input type="hidden" id="imagenUrl" name="ImagenUrl" />
+
 
                 <div class="mb-3">
                     <img id="previewImg" src="" class="img-fluid" style="max-width: 200px; display: none;">
@@ -143,13 +146,14 @@
                             $('#editorial').val(data.editorial || '').addClass('is-valid');
                             $('#cantPaginas').val(data.cantPaginas || '').addClass('is-valid');
                             $('#masInfo').val(data.masInfo || '').addClass('is-valid');
+                            $('#imagenUrl').val(data.imagenUrl || '');
 
                             // Si querés previsualizar una imagen de la API
                             if (data.imagenUrl) {
                                 $('#previewImg').attr('src', data.imagenUrl).show();
 
                                 // Quitar el "required" del input de archivo si la imagen viene de la API
-                                $('#imagenArchivo').prop('required', false);
+                                $('#ImagenArchivo').prop('required', false);
                             }
                         }
                     },

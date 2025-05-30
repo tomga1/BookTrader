@@ -71,10 +71,22 @@ namespace BookTrader.Controllers
 
             try
             {
-                if (!string.IsNullOrEmpty(insertLibroDTO.ImagenUrl) && imagenArchivo != null)
+                if (!string.IsNullOrEmpty(insertLibroDTO.ImagenUrl) && imagenArchivo != null && imagenArchivo.Length > 0)
                 {
                     ModelState.AddModelError("", "Solo puedes subir una imagen por URL o por archivo, no ambas.");
-                    return View(insertLibroDTO);
+                    return View(insertLibroDTO);    
+                }
+
+                if (imagenArchivo != null && imagenArchivo.Length > 0)
+                {
+                    // Esto le dice a MVC que "olvide" cualquier error (o requisito) sobre ImagenUrl
+                    ModelState.Remove(nameof(insertLibroDTO.ImagenUrl));
+                }
+                // 2) Si viene la URL (desde ISBN), quito cualquier error/petición sobre el archivo:
+                else if (!string.IsNullOrWhiteSpace(insertLibroDTO.ImagenUrl))
+                {
+                    ModelState.Remove("ImagenArchivo");
+                    // ojo: acá es el name del input <input type="file" name="imagenArchivo" …>
                 }
 
                 if (ModelState.IsValid)
