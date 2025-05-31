@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using BookTrader.Models;
 using BookTrader.Services;
 using Microsoft.AspNetCore.HttpOverrides;
+using AspNetCoreRateLimit;
 
 
 
@@ -55,6 +56,15 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
+builder.Services.AddMemoryCache();
+
+builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+
+
+builder.Services.AddInMemoryRateLimiting();
+
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
 var app = builder.Build();
 
 await SeedService.SeedDatabase(app.Services);
@@ -77,6 +87,8 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
+app.UseIpRateLimiting();
+
 app.UseRouting();
 
 app.UseAuthentication();
@@ -87,40 +99,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
-//async Task CrearRoles(IServiceProvider serviceProvider)
-//{
-//    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-//    var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-//    string[] roles = { "Admin", "User" };
-
-//    foreach (var role in roles)
-//    {
-//        if (!await roleManager.RoleExistsAsync(role))
-//        {
-//            await roleManager.CreateAsync(new IdentityRole(role));
-//        }
-//    }
-
-//    // Crea un usuario administrador predeterminado, si no existe
-//    string adminEmail = "admin@booktrader.com";
-//    string adminPassword = "Admin123!";
-
-//    var adminUser = await userManager.FindByEmailAsync(adminEmail);
-//    if (adminUser == null)
-//    {
-//        var newAdmin = new IdentityUser { UserName = adminEmail, Email = adminEmail };
-//        await userManager.CreateAsync(newAdmin, adminPassword);
-//        await userManager.AddToRoleAsync(newAdmin, "Admin");
-//    }
-//}
-
-//// Llama a la inicialización de roles en un scope antes de app.Run()
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-//    await CrearRoles(services);
-//}
 
 
 app.Run();
