@@ -429,19 +429,56 @@ namespace BookTrader.Controllers
         [HttpGet]
         public async Task<IActionResult> MiProfile()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if(user == null)
+            var userId = _userManager.GetUserId(User);
+            var user = await _context.Users
+                .Include(u => u.Localidad)
+                    .ThenInclude(l => l.Provincia)
+                        .ThenInclude(p => p.Pais)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null || user.Localidad == null)
             {
-                return NotFound("No se encontro el usuario"); 
+                return NotFound("No se encontró el usuario o su localidad.");
             }
+
+            var paisId = user.Localidad.Provincia.Pais.Id;
+            var provinciaId = user.Localidad.Provincia.Id;
+            var localidadId = user.Localidad.Id;
 
             var model = new MiProfileViewModel
             {
                 PhoneNumber = user.PhoneNumber,
+                PaisId = paisId,
+                ProvinciaId = provinciaId,
+                LocalidadId = localidadId,
+
+                Paises = _context.Paises
+                    .Select(p => new SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Nombre
+                    }).ToList(),
+
+                Provincias = _context.Provincias
+                    .Where(p => p.PaisId == paisId)
+                    .Select(p => new SelectListItem
+                    {
+                        Value = p.Id.ToString(),
+                        Text = p.Nombre
+                    }).ToList(),
+
+                Localidades = _context.Localidades
+                    .Where(l => l.ProvinciaId == provinciaId)
+                    .Select(l => new SelectListItem
+                    {
+                        Value = l.Id.ToString(),
+                        Text = l.Nombre
+                    }).ToList()
             };
 
-            return View(model); 
+            return View(model);
         }
+
 
 
         [HttpPost]

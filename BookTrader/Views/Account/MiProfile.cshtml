@@ -10,64 +10,49 @@
 <div class="mb-6 mt-5" style="margin-bottom:100px">
     <form asp-action="MiProfile" asp-controller="Account" method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
-        <div class="row">
 
-            <!-- Columna izquierda -->
+        <div class="row">
+            <!-- Teléfono -->
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="PhoneNumber" class="form-label">Telefono</label>
+                    <label asp-for="PhoneNumber" class="form-label">Teléfono</label>
                     <input asp-for="PhoneNumber" class="form-control" />
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
 
-            <!-- Columna derecha -->
-            @* <div class="col-md-6">
-            <div class="mb-3">
-            <label for="categoria" class="form-label">Categoría</label>
-            <select class="form-select" id="categoria" name="CategoriaId" onchange="cargarSubcategorias(this.value)">
-            @await Component.InvokeAsync("Categorias", new { dropdown = false })
-            </select>
+            <!-- País -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="PaisId" class="form-label">País</label>
+                    <select asp-for="PaisId" class="form-select" asp-items="Model.Paises" id="pais-select">
+                        <option value="">-- Selecciona un país --</option>
+                    </select>
+                    <span asp-validation-for="PaisId" class="text-danger"></span>
+                </div>
             </div>
 
-            <div class="mb-3">
-            <label for="subcategoria" class="form-label">Sub-Categoría</label>
-            <select class="form-select" id="subcategoria" name="SubCategoriasId">
-            <option value="">Selecciona una Sub-Categoría</option>
-            </select>
+            <!-- Provincia -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="ProvinciaId" class="form-label">Provincia</label>
+                    <select asp-for="ProvinciaId" class="form-select" asp-items="Model.Provincias" id="provincia-select">
+                        <option value="">-- Selecciona una provincia --</option>
+                    </select>
+                    <span asp-validation-for="ProvinciaId" class="text-danger"></span>
+                </div>
             </div>
 
-            <div class="mb-3">
-            <label for="condicion" class="form-label">Condición</label>
-            <select class="form-select" id="condicion" name="CondicionId">
-            @await Component.InvokeAsync("Condiciones", new { dropdown = false })
-            </select>
+            <!-- Localidad -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="LocalidadId" class="form-label">Localidad</label>
+                    <select asp-for="LocalidadId" class="form-select" asp-items="Model.Localidades" id="localidad-select">
+                        <option value="">-- Selecciona una localidad --</option>
+                    </select>
+                    <span asp-validation-for="LocalidadId" class="text-danger"></span>
+                </div>
             </div>
-
-            <div class="mb-3">
-            <label for="formato" class="form-label">Formato</label>
-            <select class="form-select" id="formato" name="FormatoId">
-            @await Component.InvokeAsync("Formato", new { dropdown = false })
-            </select>
-            </div>
-
-            <div class="mb-3">
-            <label for="idioma" class="form-label">Idioma</label>
-            <select class="form-select" id="idioma" name="IdiomaId">
-            @await Component.InvokeAsync("Idiomas", new { dropdown = false })
-            </select>
-            </div>
-
-            <div class="mb-3">
-            <label for="masInfo" class="form-label">Reseña</label>
-            <textarea class="form-control" id="masInfo" name="masInfo" rows="3"></textarea>
-            </div>
-
-            <div class="mb-3">
-            <label for="descripcion" class="form-label">Descripción</label>
-            <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
-            </div>
-            </div> *@
         </div>
 
         <div class="text-center mt-3">
@@ -75,3 +60,60 @@
         </div>
     </form>
 </div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");
+    }
+
+    <script>
+        document.getElementById("pais-select").addEventListener("change", function () {
+            var paisId = this.value;
+            var provinciaSelect = document.getElementById("provincia-select");
+
+            // Limpiar provincias actuales
+            provinciaSelect.innerHTML = '<option value="">-- Selecciona una provincia --</option>';
+
+            if (paisId) {
+                fetch(`/Account/GetProvincias?paisId=${paisId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(function (provincia) {
+                            var option = document.createElement("option");
+                            option.value = provincia.value;
+                            option.text = provincia.text;
+                            provinciaSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error("Error al cargar provincias:", error));
+            }
+        });
+    </script>
+    <script>
+        document.getElementById("provincia-select").addEventListener("change", function () {
+            var provinciaId = this.value;
+            var localidadSelect = document.getElementById("localidad-select");
+
+            // Limpiar localidades actuales
+            localidadSelect.innerHTML = '<option value="">-- Selecciona una localidad --</option>';
+
+            if (provinciaId) {
+                fetch(`/Account/GetLocalidades?provinciaId=${provinciaId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(function (localidad) {
+                            var option = document.createElement("option");
+                            option.value = localidad.value;
+                            option.text = localidad.text;
+                            localidadSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error("Error al cargar localidades:", error));
+            }
+        });
+    </script>
+
+
+}
+
