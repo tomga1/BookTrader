@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.Extensions.Caching.Memory;
 
 
 namespace BookTrader.Controllers
@@ -21,14 +22,16 @@ namespace BookTrader.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
         private readonly EmailSender _emailSender;
+        private readonly IMemoryCache _memoryCache; 
 
-        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context, EmailSender emailSender)
+        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context, EmailSender emailSender, IMemoryCache memoryCache)
         {
             this._signInManager = signInManager;
             this._userManager = userManager;
             this._roleManager = roleManager;
             this._context = context;
             this._emailSender = emailSender;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet]
@@ -226,13 +229,22 @@ namespace BookTrader.Controllers
         [HttpGet]
         public JsonResult GetProvincias(int paisId)
         {
-            var provincias = _context.Provincias
+            string cache_key = $"provincias_{paisId}";
+
+            if(!_memoryCache.TryGetValue(cache_key, out List<SelectListItem> provincias){
+
+                provincias = _context.Provincias
                 .Where(p => p.PaisId == paisId)
                 .Select(p => new SelectListItem
                 {
                     Value = p.Id.ToString(),
                     Text = p.Nombre
                 }).ToList();
+
+                _memoryCache.Set(cache_key,provincias, TimeSpan.FromHours(1));
+
+            }
+
 
             return Json(provincias);
         }

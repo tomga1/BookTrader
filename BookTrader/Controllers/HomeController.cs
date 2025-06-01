@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System.Diagnostics;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Microsoft.Extensions.Caching.Memory; 
 
 namespace BookTrader.Controllers
 {
@@ -13,47 +14,91 @@ namespace BookTrader.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IMemoryCache _memoryCache; 
 
-        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, IMemoryCache memoryCache)
         {
             _logger = logger;
             _context = context;
+            _memoryCache = memoryCache;
         }
+
 
         public async Task<IActionResult> Index(string searchString, int pagina = 1)
         {
             int registrosPorPagina = 16;
 
-            var libros = _context.Libros
-                .Include(l => l.Categoria)  // Incluye la información de la categoría
-                .Include(l => l.Idioma)
-                .Include(l => l.Condicion)
-                .Include(l => l.Formato)
-                .Include(l => l.EstadoPublicacion)
-                .Include(l => l.Publicador)
-                    .ThenInclude(u => u.Localidad)
-                        .ThenInclude(loc => loc.Provincia)
-                            .ThenInclude(p => p.Pais)
-                .Where(l => l.EstadoPublicacion.Nombre == "Aprobado" );
+            string cacheKey = $"libros_home_page_{pagina}";
 
-            if (!string.IsNullOrEmpty(searchString))
+            List<Libros> libros2;
+            int totalRegistros;
+
+            if (string.IsNullOrEmpty(searchString))
             {
-                libros = libros.Where(n => n.Nombre.Contains(searchString) || n.Autor.Contains(searchString));
+                if (!_memoryCache.TryGetValue(cacheKey, out libros2))
+                {
+                    var query = _context.Libros
+                        .Include(l => l.Categoria)
+                        .Include(l => l.Idioma)
+                        .Include(l => l.Condicion)
+                        .Include(l => l.Formato)
+                        .Include(l => l.EstadoPublicacion)
+                        .Include(l => l.Publicador)
+                            .ThenInclude(u => u.Localidad)
+                                .ThenInclude(loc => loc.Provincia)
+                                    .ThenInclude(p => p.Pais)
+                        .Where(l => l.EstadoPublicacion.Nombre == "Aprobado");
+
+                    totalRegistros = await query.CountAsync();
+
+                    libros2 = await query
+                        .OrderBy(l => l.Nombre)
+                        .Skip((pagina - 1) * registrosPorPagina)
+                        .Take(registrosPorPagina)
+                        .ToListAsync();
+
+                    // Cachea los resultados solo si es búsqueda vacía
+                    _memoryCache.Set(cacheKey, libros2, TimeSpan.FromMinutes(5));
+                    _memoryCache.Set($"{cacheKey}_total", totalRegistros, TimeSpan.FromMinutes(5));
+                }
+                else
+                {
+                    totalRegistros = _memoryCache.Get<int>($"{cacheKey}_total");
+                }
+            }
+            else
+            {
+                var query = _context.Libros
+                    .Include(l => l.Categoria)
+                    .Include(l => l.Idioma)
+                    .Include(l => l.Condicion)
+                    .Include(l => l.Formato)
+                    .Include(l => l.EstadoPublicacion)
+                    .Include(l => l.Publicador)
+                        .ThenInclude(u => u.Localidad)
+                            .ThenInclude(loc => loc.Provincia)
+                                .ThenInclude(p => p.Pais)
+                    .Where(l => l.EstadoPublicacion.Nombre == "Aprobado");
+
+                query = query.Where(n => n.Nombre.Contains(searchString) || n.Autor.Contains(searchString));
+
+                totalRegistros = await query.CountAsync();
+
+                libros2 = await query
+                    .OrderBy(l => l.Nombre)
+                    .Skip((pagina - 1) * registrosPorPagina)
+                    .Take(registrosPorPagina)
+                    .ToListAsync();
             }
 
-            int totalRegistros = await libros.CountAsync();
+            var categorias = await _memoryCache.GetOrCreateAsync("categorias_menu", async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+                return await _context.Categorias
+                    .Include(c => c.SubCategorias)
+                    .ToListAsync();
+            });
 
-            var libros2 = await libros
-                .OrderBy(l => l.Nombre) // Ordena según la lógica que requieras
-                .Skip((pagina - 1) * registrosPorPagina)
-                .Take(registrosPorPagina)
-                .ToListAsync();
-
-            var categorias = await _context.Categorias
-                .Include(c => c.SubCategorias)  // Asegúrate de que la entidad Categoria tenga la propiedad de navegación SubCategorias
-                .ToListAsync();
-
-            // Crea el modelo de paginación para los libros
             var modeloPaginado = new PaginacionViewModel<Libros>
             {
                 Items = libros2,
@@ -61,7 +106,6 @@ namespace BookTrader.Controllers
                 TotalPaginas = (int)Math.Ceiling((double)totalRegistros / registrosPorPagina)
             };
 
-            // Crea el HomeViewModel combinando ambas colecciones
             var viewModel = new BookTrader.Models.HomeViewModel
             {
                 LibrosPaginados = modeloPaginado,

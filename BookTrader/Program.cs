@@ -44,7 +44,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     // Políticas de seguridad
     options.Cookie.HttpOnly = true;                        
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;    
-    options.Cookie.SameSite = SameSiteMode.None;            
+    options.Cookie.SameSite = SameSiteMode.Strict;            
 
     // -------------------------
     // Expiración y renovación
