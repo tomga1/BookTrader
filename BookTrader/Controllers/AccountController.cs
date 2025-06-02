@@ -103,6 +103,7 @@ namespace BookTrader.Controllers
             var model = new RegisterViewModel
             {
                 Paises = _context.Paises
+                    .OrderBy(p => p.Nombre)
                     .Select(p => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                     {
                         Value = p.Id.ToString(),
@@ -231,7 +232,8 @@ namespace BookTrader.Controllers
         {
             string cache_key = $"provincias_{paisId}";
 
-            if(!_memoryCache.TryGetValue(cache_key, out List<SelectListItem> provincias){
+            if(!_memoryCache.TryGetValue(cache_key, out List<SelectListItem> provincias))
+            {
 
                 provincias = _context.Provincias
                 .Where(p => p.PaisId == paisId)
@@ -250,10 +252,11 @@ namespace BookTrader.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetLocalidades(int provinciaId)
+        public JsonResult GetLocalidades(int provinciaId)   
         {
             var localidades = _context.Localidades
                 .Where(l => l.ProvinciaId == provinciaId)
+                .OrderBy(l => l.Nombre)
                 .Select(l => new SelectListItem
                 {
                     Value = l.Id.ToString(),

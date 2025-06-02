@@ -21,7 +21,7 @@
                 @foreach (var libro in Model.Items)
                 {
                     <tr>
-                        <td>@libro.Nombre</td>
+                        <td>@(libro.Nombre.Length > 40? libro.Nombre.Substring(0,40) + "..." : libro.Nombre)</td>
                         <td>@libro.Autor</td>
                         <td>@libro.Editorial</td>
                         <td>@libro.Precio</td>

@@ -13,6 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using BookTrader.Helpers;
+using Microsoft.Extensions.Caching.Memory; 
 
 
 namespace BookTrader.Controllers
@@ -25,16 +26,22 @@ namespace BookTrader.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<Users> _userManager;
         private readonly GoogleBookService _googleBookService;
+        private readonly IMemoryCache _memoryCache;
 
 
-
-        public LibrosController(ApplicationDbContext context, IMapper mapper, IWebHostEnvironment webHostEnvironment, UserManager<Users> userManager, GoogleBookService googleBookService)
+        public LibrosController(ApplicationDbContext context, 
+            IMapper mapper, 
+            IWebHostEnvironment webHostEnvironment, 
+            UserManager<Users> userManager, 
+            GoogleBookService googleBookService,
+            IMemoryCache memoryCache)
         {
             _context = context; 
             _mapper = mapper;   
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;  
             _googleBookService = googleBookService;
+            _memoryCache = memoryCache;
         }
 
         [Authorize]
@@ -198,21 +205,32 @@ namespace BookTrader.Controllers
                     _context.Libros.Update(libro);
                     await _context.SaveChangesAsync();
 
+                    // Calcular total de libros aprobados
+                    int totalLibros = await _context.Libros
+                        .Include(l => l.EstadoPublicacion)
+                        .Where(l => l.EstadoPublicacion.Nombre == "Aprobado")
+                        .CountAsync();
+
+                    int registrosPorPagina = 16;
+                    int totalPaginas = (int)Math.Ceiling((double)totalLibros / registrosPorPagina);
+
+                    // Limpiar el caché de cada página
+                    for (int i = 1; i <= totalPaginas; i++)
+                    {
+                        _memoryCache.Remove($"libros_home_page_{i}");
+                        _memoryCache.Remove($"libros_home_page_{i}_total");
+                    }
+
                     return RedirectToAction("MisLibros");
                 }
 
-                else
-                {
-                    return NotFound();  
-                }
-
+                return NotFound();
             }
 
-            return BadRequest();    
+            return BadRequest();
         }
 
 
-        
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
