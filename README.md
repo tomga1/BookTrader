@@ -36,6 +36,6 @@ Instalacion de paquetes ENTITY FRAMEWORK
 En la terminal, intenta ejecutar este comando con la cadena de conexión directamente:
 
 powershell
-Copiar
+Copiar 
 Editar
 dotnet ef database update --connection "Server=DESKTOP-RDT17TE\SQLEXPRESS;Database=BookTrader;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;"

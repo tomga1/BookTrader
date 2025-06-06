@@ -78,6 +78,9 @@ namespace BookTrader.Controllers
 
             try
             {
+
+            
+
                 if (!string.IsNullOrEmpty(insertLibroDTO.ImagenUrl) && imagenArchivo != null && imagenArchivo.Length > 0)
                 {
                     ModelState.AddModelError("", "Solo puedes subir una imagen por URL o por archivo, no ambas.");
@@ -101,6 +104,26 @@ namespace BookTrader.Controllers
                     var user = await _userManager.GetUserAsync(User);
 
                     string? idUsuario = user?.Id;
+
+                    var plan = await _context.PlanesSuscripcion
+                    .FirstOrDefaultAsync(p => p.Id == user.IdPlanSuscripcion);
+
+                    if (plan == null)
+                    {
+                        ModelState.AddModelError("", "Tu plan de suscripción no es válido"); 
+                        return View(insertLibroDTO);
+                    }
+
+                    var librosPublicadosHoy = await _context.Libros
+                        .CountAsync(l => l.IdUsuario == idUsuario && l.FechaAgregado.Date == DateTime.Today);
+
+                    if(librosPublicadosHoy >= plan.CantidadLibrosPorDia)
+                    {
+                        ModelState.AddModelError("", "Has alcanzado tu límite diario de {plan.CantidadLibrosPorDia} publicación(es). Intenta mañana.");
+                        return View(insertLibroDTO);
+                    }
+
+
 
                     insertLibroDTO.Nombre = TextHelper.NormalizarNombreLibro(insertLibroDTO.Nombre); 
 
