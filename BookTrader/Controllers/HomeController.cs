@@ -6,7 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System.Diagnostics;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using Microsoft.Extensions.Caching.Memory; 
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.VisualBasic;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace BookTrader.Controllers
 {
@@ -14,13 +17,15 @@ namespace BookTrader.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
-        private readonly IMemoryCache _memoryCache; 
+        private readonly IMemoryCache _memoryCache;
+        private readonly UserManager<Users> _userManager;
 
-        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, IMemoryCache memoryCache)
+        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, IMemoryCache memoryCache, UserManager<Users> userManager)
         {
             _logger = logger;
             _context = context;
             _memoryCache = memoryCache;
+            _userManager = userManager; // ? Correcto
         }
 
 
@@ -135,7 +140,7 @@ namespace BookTrader.Controllers
         }
 
         [Authorize(Roles = "User")]
-        public IActionResult User()
+        public IActionResult PerfilUsuario()
         {
             return View();
         }
@@ -184,5 +189,12 @@ namespace BookTrader.Controllers
 
 
         }
+
+        
+
+
+
+
+
     }
 }

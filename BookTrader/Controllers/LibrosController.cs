@@ -79,8 +79,6 @@ namespace BookTrader.Controllers
             try
             {
 
-            
-
                 if (!string.IsNullOrEmpty(insertLibroDTO.ImagenUrl) && imagenArchivo != null && imagenArchivo.Length > 0)
                 {
                     ModelState.AddModelError("", "Solo puedes subir una imagen por URL o por archivo, no ambas.");
@@ -119,8 +117,8 @@ namespace BookTrader.Controllers
 
                     if(librosPublicadosHoy >= plan.CantidadLibrosPorDia)
                     {
-                        ModelState.AddModelError("", "Has alcanzado tu límite diario de {plan.CantidadLibrosPorDia} publicación(es). Intenta mañana.");
-                        return View(insertLibroDTO);
+                        TempData["ErrorSwal"] = $"Has alcanzado tu límite diario de {plan.CantidadLibrosPorDia} publicación(es). Intenta nuevamente mañana!";
+                        return RedirectToAction("Create"); 
                     }
 
 
@@ -355,7 +353,32 @@ namespace BookTrader.Controllers
             return Json(libro);
         }
 
-        
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ValidarPublicacion()
+        {
+            var usuario = await _userManager.GetUserAsync(User);
+
+            var plan = await _context.PlanesSuscripcion.FirstOrDefaultAsync(p => p.Id == usuario.IdPlanSuscripcion);
+
+            if (plan == null)
+            {
+                TempData["ErrorSwal"] = "Tu plan de suscripción no es válido.";
+                return RedirectToAction("Index", "Libros");
+            }
+
+            var librosPublicadosHoy = await _context.Libros
+                .CountAsync(l => l.IdUsuario == usuario.Id && l.FechaAgregado.Date == DateTime.Today);
+
+            if (librosPublicadosHoy >= plan.CantidadLibrosPorDia)
+            {
+                TempData["ErrorSwal"] = $"Has alcanzado tu limite diario de {plan.CantidadLibrosPorDia} publicacion(es). Intenta mañana.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Create", "Libros");
+        }
 
     }
 }
