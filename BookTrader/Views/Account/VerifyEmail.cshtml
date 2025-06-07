@@ -31,7 +31,18 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");
+    @await Html.PartialAsync("_ValidationScriptsPartial.cshtml")
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (ViewData["SwalError"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '@ViewData["SwalError"]'
+            });
+        </script>
     }
 }

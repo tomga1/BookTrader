@@ -285,7 +285,7 @@ namespace BookTrader.Controllers
 
                 if (user == null)
                 {
-                    ModelState.AddModelError("", "Usuario inexistente!");
+                    ViewData["SwalError"] = "Usuario inexistente!";
                     return View(model);
                 }
                 else
