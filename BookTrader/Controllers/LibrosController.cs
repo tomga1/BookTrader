@@ -166,6 +166,10 @@ namespace BookTrader.Controllers
             
         }
 
+        public IActionResult Create()
+        {
+            return View();  
+        }
 
         [Authorize]
         public async Task<IActionResult> MisLibros(int pagina = 1)
@@ -377,7 +381,7 @@ namespace BookTrader.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Create", "Libros");
+            return RedirectToAction("Index", "Libros");
         }
 
     }
