@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 
 
 namespace BookTrader.Controllers
@@ -22,7 +23,7 @@ namespace BookTrader.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
         private readonly EmailSender _emailSender;
-        private readonly IMemoryCache _memoryCache; 
+        private readonly IMemoryCache _memoryCache;
 
         public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context, EmailSender emailSender, IMemoryCache memoryCache)
         {
@@ -83,7 +84,7 @@ namespace BookTrader.Controllers
 
 
                 }
-                    
+
 
 
 
@@ -232,7 +233,7 @@ namespace BookTrader.Controllers
         {
             string cache_key = $"provincias_{paisId}";
 
-            if(!_memoryCache.TryGetValue(cache_key, out List<SelectListItem> provincias))
+            if (!_memoryCache.TryGetValue(cache_key, out List<SelectListItem> provincias))
             {
 
                 provincias = _context.Provincias
@@ -243,7 +244,7 @@ namespace BookTrader.Controllers
                     Text = p.Nombre
                 }).ToList();
 
-                _memoryCache.Set(cache_key,provincias, TimeSpan.FromHours(1));
+                _memoryCache.Set(cache_key, provincias, TimeSpan.FromHours(1));
 
             }
 
@@ -252,7 +253,7 @@ namespace BookTrader.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetLocalidades(int provinciaId)   
+        public JsonResult GetLocalidades(int provinciaId)
         {
             var localidades = _context.Localidades
                 .Where(l => l.ProvinciaId == provinciaId)
@@ -278,24 +279,80 @@ namespace BookTrader.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyEmail(VerifyEmailViewModel model)
         {
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(model.Email);
-
-                if (user == null)
-                {
-                    ViewData["SwalError"] = "Usuario inexistente!";
-                    return View(model);
-                }
-                else
-                {
-                    return RedirectToAction("ChangePassword", "Account", new { username = user.UserName });
-                }
+                return View(model);
             }
 
+            var user = await _userManager.FindByNameAsync(model.Email);
+
+            if (user != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callback = Url.Action("ResetPassword", "Account", new { token, email = user.Email }, protocol: Request.Scheme);
+
+                await _emailSender.SendEmailAsync(user.Email, "Restablecer contraseña",
+                    $"Hacé click <a href='{callback}'>aquí</a> para restablecer la contraseña.");
+            }
+
+            return RedirectToAction(nameof(ForgotPasswordConfirmation));
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if(token == null || email == null)
+            {
+                return RedirectToAction("VerifyEmail");
+            }
+
+            return View(new ChangePasswordViewModel {Token = token, Email = email}); 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if(user == null)
+            {
+                return RedirectToAction("ForgotPasswordConfirmation");
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("ResetPasswordConfirmation");
+            }
+
+            foreach(var err in result.Errors)
+            {
+                ModelState.AddModelError("", err.Description); 
+            }
             return View(model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
 
         [HttpGet]
         public IActionResult ChangePassword(string username)
