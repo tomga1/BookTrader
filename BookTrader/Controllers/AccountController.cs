@@ -146,7 +146,9 @@ namespace BookTrader.Controllers
                     UserName = model.Email,
                     NormalizedUserName = model.Email.ToUpper(),
                     NormalizedEmail = model.Email.ToUpper(),
-                    Localidad = localidad // acá le pasás el objeto completo
+                    Localidad = localidad,
+                    IdPlanSuscripcion  = 1 // acá le pasás el objeto completo
+                    
                 };
 
 
@@ -188,7 +190,7 @@ namespace BookTrader.Controllers
                     await _signInManager.SignInAsync(users, isPersistent: false);
 
 
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("ConfirmacionRegistro", "Account");
                 }
                 else
                 {
@@ -227,6 +229,11 @@ namespace BookTrader.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult ConfirmacionRegistro()
+        {
+            return View();
+        }
 
         [HttpGet]
         public JsonResult GetProvincias(int paisId)

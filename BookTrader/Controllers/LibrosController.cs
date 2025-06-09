@@ -377,7 +377,7 @@ namespace BookTrader.Controllers
 
             if (librosPublicadosHoy >= plan.CantidadLibrosPorDia)
             {
-                TempData["ErrorSwal"] = $"Has alcanzado tu limite diario de {plan.CantidadLibrosPorDia} publicacion(es). Intenta mañana.";
+                TempData["ErrorSwal"] = $"Has alcanzado tu limite diario de {plan.CantidadLibrosPorDia} publicacion(es). Suscribete para extender el limite de publicaciones.";
                 return RedirectToAction("Index", "Home");
             }
 

@@ -33,76 +33,37 @@ namespace BookTrader.Controllers
         {
             int registrosPorPagina = 16;
 
-            string cacheKey = $"libros_home_page_{pagina}";
-
             List<Libros> libros2;
             int totalRegistros;
 
-            if (string.IsNullOrEmpty(searchString))
+            var query = _context.Libros
+                .Include(l => l.Categoria)
+                .Include(l => l.Idioma)
+                .Include(l => l.Condicion)
+                .Include(l => l.Formato)
+                .Include(l => l.EstadoPublicacion)
+                .Include(l => l.Publicador)
+                    .ThenInclude(u => u.Localidad)
+                        .ThenInclude(loc => loc.Provincia)
+                            .ThenInclude(p => p.Pais)
+                .Where(l => l.EstadoPublicacion.Nombre == "Aprobado");
+
+            if (!string.IsNullOrEmpty(searchString))
             {
-                if (!_memoryCache.TryGetValue(cacheKey, out libros2))
-                {
-                    var query = _context.Libros
-                        .Include(l => l.Categoria)
-                        .Include(l => l.Idioma)
-                        .Include(l => l.Condicion)
-                        .Include(l => l.Formato)
-                        .Include(l => l.EstadoPublicacion)
-                        .Include(l => l.Publicador)
-                            .ThenInclude(u => u.Localidad)
-                                .ThenInclude(loc => loc.Provincia)
-                                    .ThenInclude(p => p.Pais)
-                        .Where(l => l.EstadoPublicacion.Nombre == "Aprobado");
-
-                    totalRegistros = await query.CountAsync();
-
-                    libros2 = await query
-                        .OrderBy(l => l.Nombre)
-                        .Skip((pagina - 1) * registrosPorPagina)
-                        .Take(registrosPorPagina)
-                        .ToListAsync();
-
-                    // Cachea los resultados solo si es búsqueda vacía
-                    _memoryCache.Set(cacheKey, libros2, TimeSpan.FromMinutes(5));
-                    _memoryCache.Set($"{cacheKey}_total", totalRegistros, TimeSpan.FromMinutes(5));
-                }
-                else
-                {
-                    totalRegistros = _memoryCache.Get<int>($"{cacheKey}_total");
-                }
-            }
-            else
-            {
-                var query = _context.Libros
-                    .Include(l => l.Categoria)
-                    .Include(l => l.Idioma)
-                    .Include(l => l.Condicion)
-                    .Include(l => l.Formato)
-                    .Include(l => l.EstadoPublicacion)
-                    .Include(l => l.Publicador)
-                        .ThenInclude(u => u.Localidad)
-                            .ThenInclude(loc => loc.Provincia)
-                                .ThenInclude(p => p.Pais)
-                    .Where(l => l.EstadoPublicacion.Nombre == "Aprobado");
-
                 query = query.Where(n => n.Nombre.Contains(searchString) || n.Autor.Contains(searchString));
-
-                totalRegistros = await query.CountAsync();
-
-                libros2 = await query
-                    .OrderBy(l => l.Nombre)
-                    .Skip((pagina - 1) * registrosPorPagina)
-                    .Take(registrosPorPagina)
-                    .ToListAsync();
             }
 
-            var categorias = await _memoryCache.GetOrCreateAsync("categorias_menu", async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
-                return await _context.Categorias
-                    .Include(c => c.SubCategorias)
-                    .ToListAsync();
-            });
+            totalRegistros = await query.CountAsync();
+
+            libros2 = await query
+                .OrderBy(l => l.Nombre)
+                .Skip((pagina - 1) * registrosPorPagina)
+                .Take(registrosPorPagina)
+                .ToListAsync();
+
+            var categorias = await _context.Categorias
+                .Include(c => c.SubCategorias)
+                .ToListAsync();
 
             var modeloPaginado = new PaginacionViewModel<Libros>
             {
@@ -119,6 +80,7 @@ namespace BookTrader.Controllers
 
             return View(viewModel);
         }
+
 
 
 

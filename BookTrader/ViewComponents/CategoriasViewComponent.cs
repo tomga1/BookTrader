@@ -19,7 +19,7 @@ namespace BookTrader.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(bool dropdown = false, int? selectedId = null)
         {
             var categorias = await _context.Categorias
-                .OrderBy(c => c.Nombre)
+                .OrderBy(c => c.Id)
                 .ToListAsync();
 
             ViewData["Dropdown"] = dropdown;

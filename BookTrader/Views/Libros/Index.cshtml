@@ -60,14 +60,14 @@
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="categoria" class="form-label">Categoría</label>
-                    <select class="form-select" id="categoria" name="CategoriaId" onchange="cargarSubcategorias(this.value)">
+                    <select class="form-select" id="categoria" name="CategoriaId" onchange="cargarSubcategorias(this.value)" required>
                         @await Component.InvokeAsync("Categorias", new { dropdown = false })
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="subcategoria" class="form-label">Sub-Categoría</label>
-                    <select class="form-select" id="subcategoria" name="SubCategoriasId">
+                    <select class="form-select" id="subcategoria" name="SubCategoriasId" required>
                         <option value="">Selecciona una Sub-Categoría</option>
                     </select>
                 </div>
