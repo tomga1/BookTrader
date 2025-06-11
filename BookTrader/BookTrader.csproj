@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Account\ConfirmacionRegistro.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="MailKit" Version="4.11.0" />
@@ -30,18 +26,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Account\ConfirmacionRegistro.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Account\ConfirmacionRegistro.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Account\ConfirmacionRegistro.cshtml" />
   </ItemGroup>
 
 </Project>

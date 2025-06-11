@@ -33,3 +33,40 @@ html, body {
 }
 
 
+
+
+.confirmacionRegistro {
+    max-width: 500px;
+    margin: 100px auto;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+    .confirmacionRegistro h2 {
+        color: #343a40;
+        margin-bottom: 20px;
+    }
+
+    .confirmacionRegistro p {
+        font-size: 18px;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+.btn-ir-login {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+    .btn-ir-login:hover {
+        background-color: #0056b3;
+    }

@@ -229,6 +229,8 @@ namespace BookTrader.Controllers
             return View(model);
         }
 
+
+
         [HttpGet]
         public IActionResult ConfirmacionRegistro()
         {
