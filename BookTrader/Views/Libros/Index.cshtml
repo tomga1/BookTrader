@@ -134,7 +134,16 @@
     }
 
     $(document).ready(function () {
-        $('#isbn').on('blur', function () { // o 'change' si preferís
+
+        // Si se sube una imagen manualmente, limpiar imagen de la API
+        $('#ImagenArchivo').on('change', function () {
+            if (this.files.length > 0) {
+                $('#imagenUrl').val('');
+                $('#previewImg').hide().attr('src', '');
+            }
+        });
+
+        $('#isbn').on('blur', function () {
             var isbn = $(this).val().trim();
             if (isbn !== '') {
                 $.ajax({
@@ -144,19 +153,16 @@
                     success: function (data) {
 
                         if (data) {
-                            console.log(data); 
+                            console.log(data);
                             $('#nombre').val(data.nombre || '').addClass('is-valid');
                             $('#autor').val(data.autor || '').addClass('is-valid');
                             $('#editorial').val(data.editorial || '').addClass('is-valid');
                             $('#cantPaginas').val(data.cantPaginas || '').addClass('is-valid');
                             $('#masInfo').val(data.masInfo || '').addClass('is-valid');
-                            $('#imagenUrl').val(data.imagenUrl || '');
 
-                            // Si querés previsualizar una imagen de la API
-                            if (data.imagenUrl) {
+                            if (data.imagenUrl && $('#ImagenArchivo').get(0).files.length === 0) {
                                 $('#previewImg').attr('src', data.imagenUrl).show();
-
-                                // Quitar el "required" del input de archivo si la imagen viene de la API
+                                $('#imagenUrl').val(data.imagenUrl);
                                 $('#ImagenArchivo').prop('required', false);
                             }
                         }
@@ -168,6 +174,7 @@
             }
         });
     });
+
 </script>
 
 
