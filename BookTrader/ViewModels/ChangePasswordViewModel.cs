@@ -22,7 +22,6 @@ namespace BookTrader.ViewModels
         [Compare("NewPassword", ErrorMessage = "Las contraseñas no coinciden")]
         public string ConfirmNewPassword { get; set; }
 
-        [Required]
-        public string Token { get; set; }
+       
     }
 }

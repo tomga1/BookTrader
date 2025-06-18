@@ -355,6 +355,7 @@ namespace BookTrader.Controllers
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ChangePasswordViewModel model)
         {
+            
             if (!ModelState.IsValid)
             {
                 return View(model);
