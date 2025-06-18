@@ -289,23 +289,39 @@ namespace BookTrader.Controllers
         public async Task<IActionResult> VerifyEmail(VerifyEmailViewModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return View(model);
-            }
 
             var user = await _userManager.FindByNameAsync(model.Email);
 
             if (user != null)
             {
+                // 1. Generar token de Identity
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callback = Url.Action("ResetPassword", "Account", new { token, email = user.Email }, protocol: Request.Scheme);
 
+                // 2. Crear y guardar registro con GUID
+                var request = new PasswordResetRequest
+                {
+                    Email = user.Email,
+                    Token = token,
+                    GuidCode = Guid.NewGuid(),
+                    Expiration = DateTime.UtcNow.AddHours(1),
+                    Used = false
+                };
+                _context.PasswordResetRequests.Add(request);
+                await _context.SaveChangesAsync();
+
+                // 3. Generar el enlace que solo contiene el GUID
+                var callback = Url.Action("ResetPassword", "Account",
+                    new { id = request.GuidCode }, Request.Scheme);
+
+                // 4. Enviar email con ese enlace
                 await _emailSender.SendEmailAsync(user.Email, "Restablecer contraseña",
                     $"Hacé click <a href='{callback}'>aquí</a> para restablecer la contraseña.");
             }
 
             return RedirectToAction(nameof(ForgotPasswordConfirmation));
         }
+
 
         [HttpGet]
         public IActionResult ForgotPasswordConfirmation()
@@ -316,18 +332,27 @@ namespace BookTrader.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ResetPassword(string token, string email)
+        public IActionResult ResetPassword(Guid id)
         {
-            if(token == null || email == null)
+            var req = _context.PasswordResetRequests
+                .FirstOrDefault(r => r.GuidCode == id && !r.Used && r.Expiration > DateTime.UtcNow);
+
+            if (req == null)
             {
+                // GUID inválido, usado o vencido
                 return RedirectToAction("VerifyEmail");
             }
 
-            return View(new ChangePasswordViewModel {Token = token, Email = email}); 
+            // Cargo la vista con Email y GuidCode (no expongo token)
+            return View(new ChangePasswordViewModel
+            {
+                Email = req.Email,
+                GuidCode = req.GuidCode
+            });
         }
 
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -335,25 +360,47 @@ namespace BookTrader.Controllers
                 return View(model);
             }
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if(user == null)
+            var request = await _context.PasswordResetRequests
+                .FirstOrDefaultAsync(r => r.GuidCode == model.GuidCode && !r.Used && r.Expiration > DateTime.UtcNow);
+
+            if (request == null)
             {
-                return RedirectToAction("ForgotPasswordConfirmation");
+                ModelState.AddModelError("", "La solicitud de restablecimiento es inválida o ha expirado.");
+                return View(model);
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "El usuario no existe.");
+                return View(model);
+            }
 
+            var tokenValid = await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", request.Token);
+            if (!tokenValid)
+            {
+                ModelState.AddModelError("", "El token de restablecimiento es inválido.");
+                return View(model);
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, request.Token, model.NewPassword);
             if (result.Succeeded)
             {
+                request.Used = true;
+                _context.Update(request);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction("ResetPasswordConfirmation");
             }
 
-            foreach(var err in result.Errors)
+            foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("", err.Description); 
+                ModelState.AddModelError("", error.Description);
             }
+
             return View(model);
         }
+
 
         [HttpGet]
         [AllowAnonymous]

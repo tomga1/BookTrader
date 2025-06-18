@@ -4,6 +4,8 @@ namespace BookTrader.ViewModels
 {
     public class ChangePasswordViewModel
     {
+        [Required]
+        public Guid GuidCode { get; set; }
         [Required(ErrorMessage = "El email es requerido")]
         [EmailAddress(ErrorMessage = "El email no es válido")]
         public string Email { get; set; }

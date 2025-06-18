@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace BookTrader.Data
 {
@@ -24,7 +25,7 @@ namespace BookTrader.Data
         public DbSet<SubCategorias> SubCategorias { get; set; }
         public DbSet<EstadoPublicacionEntity> EstadoPublicacionEntity { get; set; }
         public DbSet<PlanesSuscripcion> PlanesSuscripcion { get; set; }
-
+        public DbSet<PasswordResetRequest> PasswordResetRequests { get; set; }
 
 
 
