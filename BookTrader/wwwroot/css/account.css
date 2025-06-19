@@ -1,72 +1,83 @@
-﻿/*account-container{
-    background-image
-}
-*/
-
-html, body {
+﻿html, body {
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: #f0f0f0;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-.account-box {
-    background-color: white;
-    padding: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    width: 100%; /* Ocupa el 100% del contenedor */
-    max-height:90vh;
-    overflow-y: auto; 
-    text-align: center  ; 
-}
-
+/* Contenedor general de la vista de cuenta */
 .account-container {
-    width: 25rem;
-    height: 33rem;
-    min-height: 100vh; /* Asegura que cubra toda la altura de la pantalla */
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin:2rem auto; 
+    padding: 2rem;
 }
 
-
-
-
-.confirmacionRegistro {
-    max-width: 500px;
-    margin: 100px auto;
-    padding: 30px;
-    background-color: #f8f9fa;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+.form-label {
+    display: block;
     text-align: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-    .confirmacionRegistro h2 {
-        color: #343a40;
-        margin-bottom: 20px;
-    }
-
-    .confirmacionRegistro p {
-        font-size: 18px;
-        color: #555;
-        margin-bottom: 30px;
-    }
-
-.btn-ir-login {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
+.text-center-custom{
+    display: block;
+    text-align: center;
+}
+/* Caja blanca centrada para formularios */
+.account-box, .card-body-reset {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
 }
 
-    .btn-ir-login:hover {
-        background-color: #0056b3;
+    .card-body-reset .form-group {
+        margin-bottom: 1.5rem;
     }
+
+    .card-body-reset .form-control {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 8px;
+    }
+
+    .card-body-reset label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .card-body-reset .btn-block {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+
+    /* Mensajes de error */
+    .card-body-reset .text-danger {
+        font-size: 0.875rem;
+    }
+
+/* Encabezado de la card */
+.card-header {
+    padding: 1rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .account-box, .card-body-reset {
+        padding: 1.5rem;
+    }
+
+    .card-header h4 {
+        font-size: 1.1rem;
+    }
+}
